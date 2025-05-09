@@ -1,0 +1,211 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cake Price Calculator</title>
+  <style>
+    body { font-family: Arial, sans-serif; padding: 1em; }
+    form { display: flex; flex-direction: column; gap: 1em; max-width: 400px; margin: auto; }
+    label { font-weight: bold; }
+    input, select { padding: 0.5em; }
+    .hidden { display: none; }
+    select[multiple] { height: auto; min-height: 4em; }
+    select[multiple] option { padding: 0.5em; }
+    option:checked { background-color: #cce5ff; }
+  </style>
+</head>
+<body>
+  <h1>Cake Price Calculator</h1>
+  <form id="cakeForm">
+    <label>Type
+      <select id="type">
+        <option value="cake">Cake</option>
+        <option value="cupcake">Cupcake</option>
+      </select>
+    </label>
+    <label>Amount
+      <input type="number" id="amount" min="1" max="500" value="1">
+    </label>
+    <label id="cakeStyleLabel">Cake Style
+      <select id="cakeStyle">
+        <option value="classic">Classic</option>
+        <option value="custom">Custom Made</option>
+      </select>
+    </label>
+    <label>Taste of Cake
+      <select id="taste">
+        <option value="vanilla">Vanilla</option>
+        <option value="chocolate">Chocolate</option>
+        <option value="carrot">Carrot</option>
+        <option value="orange">Orange</option>
+      </select>
+    </label>
+    <label>Size
+      <select id="size">
+        <option value="18">18''</option>
+        <option value="20">20''</option>
+        <option value="mini">Mini</option>
+        <option value="regular">Regular</option>
+      </select>
+    </label>
+    <label id="creamToppingLabel">Cream Topping
+      <input type="checkbox" id="creamTopping">
+    </label>
+    <label id="layersLabel">Layers
+      <select id="layers">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+        <option value="6">6</option>
+      </select>
+    </label>
+    <label>Natural Colors
+      <input type="checkbox" id="naturalColors">
+    </label>
+    <label id="smallCandiesLabel">Small Candies
+      <input type="checkbox" id="smallCandies">
+    </label>
+    <label id="pipingLabel">Piping
+      <input type="checkbox" id="piping">
+    </label>
+    <label id="lettersLabel">Letters on Cake
+      <select id="letters">
+        <option value="no">No</option>
+        <option value="small">Small</option>
+        <option value="big">Big</option>
+      </select>
+    </label>
+    <label id="nameLabel">Name on Cake
+      <input type="text" id="cakeName">
+    </label>
+    <label id="nutsLabel">Nuts
+      <input type="checkbox" id="nuts">
+    </label>
+    <label id="fruitsLabel">Fruits
+      <input type="checkbox" id="fruits">
+    </label>
+    <label id="layerFillingLabel">Layer Filling
+      <select id="layerFilling" multiple size="5">
+        <option value="nuts">Nuts</option>
+        <option value="fruits">Fruits</option>
+        <option value="oreo">Oreo</option>
+        <option value="lotus">Lotus</option>
+        <option value="jam">Jam</option>
+      </select>
+    </label>
+    <div id="toppersLabel">
+      <label>Toppers 1
+        <input type="checkbox" id="topper1">
+      </label>
+      <label>Toppers 2
+        <input type="checkbox" id="topper2">
+      </label>
+    </div>
+  </form>
+  <h2>Total Price: €<span id="totalPrice">0.00</span></h2>
+
+  <script>
+    const form = document.getElementById('cakeForm');
+    const totalPriceEl = document.getElementById('totalPrice');
+
+    function calculatePrice() {
+      const type = document.getElementById('type').value;
+      const amount = parseInt(document.getElementById('amount').value);
+      const cakeStyle = document.getElementById('cakeStyle').value;
+      const size = document.getElementById('size').value;
+      const creamTopping = document.getElementById('creamTopping').checked;
+      const layers = parseInt(document.getElementById('layers').value);
+      const naturalColors = document.getElementById('naturalColors').checked;
+      const smallCandies = document.getElementById('smallCandies').checked;
+      const piping = document.getElementById('piping').checked;
+      const letters = document.getElementById('letters').value;
+      const cakeName = document.getElementById('cakeName').value || "";
+      const nuts = document.getElementById('nuts').checked;
+      const fruits = document.getElementById('fruits').checked;
+      const layerFilling = [...document.getElementById('layerFilling').options].filter(o => o.selected).map(o => o.value);
+      const topper1 = document.getElementById('topper1').checked;
+      const topper2 = document.getElementById('topper2').checked;
+
+      let price = 0;
+
+      if (type === 'cake') {
+        price += size === '18' ? 30 : 35;
+        price += (layers - 1) * 10;
+        if (naturalColors) price += 2;
+        if (smallCandies) price += 3;
+        if (piping) price += cakeStyle === 'classic' ? 7 : 15;
+        if (letters !== 'no') price += (letters === 'small' ? 0.2 : 0.5) * cakeName.length;
+        if (nuts) price += 5;
+        if (fruits) price += 5;
+        if (layers > 1 && layerFilling.length > 0) {
+          const totalFilling = layerFilling.reduce((sum, fill) => sum + (fill === 'jam' ? 1 : 1.5), 0);
+          price += (layers - 1) * totalFilling;
+        }
+        if (topper1) price += 10;
+        if (topper2) price += 10;
+      } else {
+        price += size === 'mini' ? 2 * amount : 4 * amount;
+        if (creamTopping) price += 0.5 * amount;
+        if (naturalColors) {
+          if (amount <= 12) price += 1;
+          else if (amount <= 30) price += 2;
+          else price += 2 + Math.ceil((amount - 30) / 20) * 2;
+        }
+      }
+
+      totalPriceEl.textContent = price.toFixed(2);
+    }
+
+    function updateVisibility() {
+      const prevType = document.getElementById('type').dataset.prevType || '';
+      const currentType = document.getElementById('type').value;
+      if (prevType && prevType !== currentType) {
+        form.reset();
+        document.getElementById('amount').value = 1;
+      }
+      document.getElementById('type').dataset.prevType = currentType;
+      const type = document.getElementById('type').value;
+      const layers = parseInt(document.getElementById('layers').value);
+      const letters = document.getElementById('letters').value;
+
+      const cakeOnly = ["cakeStyleLabel", "layersLabel", "smallCandiesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppersLabel"];
+      const cupcakeOnly = ["creamToppingLabel"];
+
+      cakeOnly.forEach(id => document.getElementById(id).classList.toggle('hidden', type !== 'cake'));
+      cupcakeOnly.forEach(id => document.getElementById(id).classList.toggle('hidden', type !== 'cupcake'));
+
+      document.getElementById('layerFillingLabel').classList.toggle('hidden', type !== 'cake' || layers === 1);
+      const nameLabel = document.getElementById('nameLabel');
+      const cakeNameInput = document.getElementById('cakeName');
+      const hideName = type !== 'cake' || letters === 'no';
+      nameLabel.classList.toggle('hidden', hideName);
+      if (hideName) cakeNameInput.value = '';
+
+      const taste = document.getElementById('taste');
+      const size = document.getElementById('size');
+      Array.from(taste.options).forEach(opt => {
+        if (type === 'cake' && (opt.value === 'carrot' || opt.value === 'orange')) opt.disabled = true;
+        else if (type === 'cupcake' && (opt.value === 'carrot' || opt.value === 'orange')) opt.disabled = false;
+      });
+
+      Array.from(size.options).forEach(opt => {
+        if (type === 'cake' && (opt.value === 'mini' || opt.value === 'regular')) opt.disabled = true;
+        else if (type === 'cupcake' && (opt.value === '18' || opt.value === '20')) opt.disabled = true;
+        else opt.disabled = false;
+      });
+    }
+
+    form.addEventListener('change', () => {
+      updateVisibility();
+      calculatePrice();
+    });
+
+    updateVisibility();
+    calculatePrice();
+  </script>
+</body>
+</html>
