@@ -205,8 +205,8 @@
     <label>Natural Colors
       <input type="checkbox" id="naturalColors">
     </label>
-    <label id="smallCandiesLabel">Small Candies
-      <input type="checkbox" id="smallCandies">
+    <label id="sprinklesLabel">sprinkles
+      <input type="checkbox" id="sprinkles">
     </label>
     <label id="pipingLabel">Piping
       <input type="checkbox" id="piping">
@@ -259,7 +259,7 @@
       const creamTopping = document.getElementById('creamTopping').checked;
       const layers = parseInt(document.getElementById('layers').value);
       const naturalColors = document.getElementById('naturalColors').checked;
-      const smallCandies = document.getElementById('smallCandies').checked;
+      const ssprinkles = document.getElementById('sprinkles').checked;
       const piping = document.getElementById('piping').checked;
       const letters = document.getElementById('letters').value;
       const cakeName = document.getElementById('cakeName').value || "";
@@ -275,7 +275,7 @@
         price += size === '18' ? 30 : 35;
         price += (layers - 1) * 10;
         if (naturalColors) price += 2;
-        if (smallCandies) price += 3;
+        if (sprinkles) price += 3;
         if (piping) price += cakeStyle === 'classic' ? 7 : 15;
         if (letters !== 'no') price += (letters === 'small' ? 0.2 : 0.5) * cakeName.length;
         if (nuts) price += 5;
@@ -311,7 +311,7 @@
       const layers = parseInt(document.getElementById('layers').value);
       const letters = document.getElementById('letters').value;
 
-      const cakeOnly = ["cakeStyleLabel", "layersLabel", "smallCandiesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppersLabel"];
+      const cakeOnly = ["cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppersLabel"];
       const cupcakeOnly = ["creamToppingLabel"];
 
       cakeOnly.forEach(id => document.getElementById(id).classList.toggle('hidden', type !== 'cake'));
