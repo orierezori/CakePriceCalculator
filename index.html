@@ -325,7 +325,11 @@
 
       Array.from(size.options).forEach(opt => {
         opt.hidden = !validSizes.includes(opt.value);
+        opt.disabled = !validSizes.includes(opt.value);
       });
+      if (!validSizes.includes(size.value)) {
+        size.value = validSizes[0];
+      }
     }
 
     form.addEventListener('change', () => {
