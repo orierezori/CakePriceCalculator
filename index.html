@@ -83,6 +83,70 @@
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(139, 64, 80, 0.1);
     }
+
+    /* Added styles for the new Summary Order section */
+    .summary-order-section {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem; /* Same as form */
+      background: #F7D7E3; /* Same background as form */
+      padding: 1.5rem; /* Same padding as form */
+      border-radius: 12px; /* Same border-radius as form */
+      box-shadow: 0 4px 12px rgba(139, 64, 80, 0.1); /* Same box-shadow as form */
+      margin-top: 2rem; /* Space from the price display */
+    }
+
+    .summary-order-section h2 {
+      text-align: center;
+      color: #8B4050; /* Theme color */
+      font-size: 1.5rem; /* Adjusted size, smaller than H1 */
+      margin: 0 0 1rem 0; /* Adjusted margin, no top margin as parent has padding */
+      text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.3); /* Consistent with H1 */
+      /* Removing background from this h2 to let parent background show */
+      background: none;
+      box-shadow: none;
+      padding: 0; /* Reset padding if it inherited from generic h2 */
+    }
+
+    /* Added styles for input[type="date"] to match other inputs */
+    /* This is a new rule to adhere to "only add" constraint */
+    input[type="date"] {
+      width: 100%;
+      padding: 0.8rem;
+      border: 2px solid #E9E3F9;
+      border-radius: 8px;
+      font-size: 1rem;
+      background: white;
+      color: #8B4050;
+      font-family: Arial, sans-serif; /* Ensure font consistency */
+    }
+    /* Styling for placeholder text in date input (might need browser prefixes) */
+    input[type="date"]::-webkit-calendar-picker-indicator {
+        opacity: 0.6;
+    }
+    input[type="date"]:required:invalid::-webkit-datetime-edit {
+        color: #999; /* Light grey for placeholder text like "mm/dd/yyyy" */
+    }
+
+
+    /* Added styles for the Summarise Order button */
+    #summariseOrderBtn {
+      background-color: #8B4050; /* Main theme accent color */
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 1rem; /* Space above the button */
+      width: 100%;
+      transition: background-color 0.3s ease;
+    }
+
+    #summariseOrderBtn:hover {
+      background-color: #A45069; /* Slightly lighter/different shade for hover */
+    }
   </style>
 </head>
 <body>
@@ -174,6 +238,22 @@
     </label>
   </form>
   <h2>Total Price: €<span id="totalPrice">0.00</span></h2>
+
+  <!-- Added Summary Order Section -->
+  <div class="summary-order-section">
+    <h2>Summary Order</h2>
+    <label>Theme
+      <input type="text" id="theme" name="theme">
+    </label>
+    <label>Pickup Date
+      <input type="date" id="pickupDate" name="pickupDate">
+    </label>
+    <label>Alergies
+      <input type="text" id="alergies" name="alergies">
+    </label>
+    <button type="button" id="summariseOrderBtn">Summarise Order</button>
+  </div>
+  <!-- End of Added Summary Order Section -->
 
   <script>
     const form = document.getElementById('cakeForm');
