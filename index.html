@@ -236,14 +236,12 @@
         <option value="jam">Jam</option>
       </select>
     </label>
-    <div id="toppersLabel">
-      <label>Toppers 1
+      <label id="toppers1Label">Toppers 1
         <input type="checkbox" id="topper1">
       </label>
-      <label>Toppers 2
+      <label id="toppers2Label">Toppers 2
         <input type="checkbox" id="topper2">
       </label>
-    </div>
   </form>
   <h2>Total Price: €<span id="totalPrice">0.00</span></h2>
 
@@ -311,7 +309,7 @@
       const layers = parseInt(document.getElementById('layers').value);
       const letters = document.getElementById('letters').value;
 
-      const cakeOnly = ["cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppersLabel"];
+      const cakeOnly = ["cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppers1Label", "toppers1Labe2"];
       const cupcakeOnly = ["creamToppingLabel"];
 
       cakeOnly.forEach(id => document.getElementById(id).classList.toggle('hidden', type !== 'cake'));
