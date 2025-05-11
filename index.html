@@ -155,7 +155,7 @@
         color: #8B4050;
         font-size: 0.9rem;
         line-height: 1.5;
-        margin-bottom: 1rem; /* Add some space before action buttons */
+        margin-bottom: 1rem;
     }
 
     .topper-text-input {
@@ -165,22 +165,21 @@
       width: auto;
     }
 
-    /* --- ADDED CSS for summary action buttons --- */
     #summaryActionsContainer {
       display: flex;
-      gap: 0.75rem; /* Space between buttons */
+      gap: 0.75rem;
       align-items: center;
-      margin-top: 1rem; /* Space above the buttons, below the summary text */
+      margin-top: 1rem;
     }
 
     #copySummaryBtn,
     #generateTikkieBtn {
-      background-color: #8B4050; /* Main theme accent color */
+      background-color: #8B4050;
       color: white;
-      padding: 0.5rem 0.8rem; /* Smaller padding for smaller buttons */
+      padding: 0.5rem 0.8rem;
       border: none;
-      border-radius: 6px; /* Slightly smaller radius */
-      font-size: 0.85rem; /* Smaller font size */
+      border-radius: 6px;
+      font-size: 0.85rem;
       font-weight: 500;
       cursor: pointer;
       transition: background-color 0.2s ease;
@@ -188,11 +187,21 @@
 
     #copySummaryBtn:hover,
     #generateTikkieBtn:hover {
-      background-color: #A45069; /* Slightly lighter shade for hover */
+      background-color: #A45069;
     }
 
     #copySummaryBtn .icon {
-        margin-right: 0.3em; /* Space between icon and text if any */
+        margin-right: 0.3em;
+    }
+
+    /* --- ADDED CSS for Tikkie placeholder --- */
+    .tikkie-placeholder {
+        color: #0066cc; /* A distinct link-like color */
+        text-decoration: underline;
+        cursor: pointer;
+    }
+    .tikkie-placeholder:hover {
+        color: #004C99; /* Darker on hover */
     }
     /* --- END OF ADDED CSS --- */
 
@@ -302,7 +311,6 @@
       <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
     </label>
     <button type="button" id="summariseOrderBtn">Summarise Order</button>
-    <!-- --- MODIFIED: Added container for action buttons --- -->
     <div id="orderSummaryOutputContainer" style="display: none;">
       <pre id="orderSummaryOutput"></pre>
       <div id="summaryActionsContainer">
@@ -310,7 +318,6 @@
         <button id="generateTikkieBtn">Generate Tikkie</button>
       </div>
     </div>
-    <!-- --- END OF MODIFICATION --- -->
   </div>
 
   <script>
@@ -582,21 +589,24 @@
 
       summary += `\n💰 *Total Price:* €${totalPrice}\n\n`;
       summary += `To confirm your order, please complete the payment via this Tikkie link:\n`;
-      summary += `👉 [Tikkie link]\n\n`;
+      // --- MODIFIED: Wrap [Tikkie link] in a span ---
+      summary += `👉 <span class="tikkie-placeholder">[Tikkie link]</span>\n\n`;
+      // --- END OF MODIFICATION ---
       summary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I’m here for you! 💬\n\n`;
       summary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
       summary += `Maayan (Manu) 🩷`;
 
-      orderSummaryOutput.textContent = summary;
+      // --- MODIFIED: Use innerHTML to render the span ---
+      orderSummaryOutput.innerHTML = summary;
+      // --- END OF MODIFICATION ---
       orderSummaryOutputContainer.style.display = 'block';
     });
 
-    // --- ADDED: Event listeners for new action buttons ---
     const copySummaryBtn = document.getElementById('copySummaryBtn');
     const generateTikkieBtn = document.getElementById('generateTikkieBtn');
 
     copySummaryBtn.addEventListener('click', () => {
-      const summaryText = orderSummaryOutput.textContent;
+      const summaryText = orderSummaryOutput.textContent; // .textContent will get the text, including the updated Tikkie link
       if (navigator.clipboard && summaryText) {
         navigator.clipboard.writeText(summaryText)
           .then(() => {
@@ -604,7 +614,7 @@
             copySummaryBtn.innerHTML = 'Copied!';
             setTimeout(() => {
               copySummaryBtn.innerHTML = originalText;
-            }, 2000); // Reset after 2 seconds
+            }, 2000);
           })
           .catch(err => {
             console.error('Failed to copy text: ', err);
@@ -618,7 +628,27 @@
     generateTikkieBtn.addEventListener('click', () => {
       window.open('https://play.google.com/store/apps/details?id=com.abnamro.nl.tikkie&hl=en', '_blank');
     });
-    // --- END OF ADDED EVENT LISTENERS ---
+
+    // --- ADDED: Event listener for clickable Tikkie link placeholder ---
+    orderSummaryOutput.addEventListener('click', function(event) {
+        let targetElement = event.target;
+        if (targetElement.classList.contains('tikkie-placeholder')) {
+            event.preventDefault(); // Good practice for clickable spans
+            
+            const currentText = targetElement.textContent;
+            const newLink = prompt("Please paste your Tikkie link here:", 
+                                   (currentText !== '[Tikkie link]' && currentText.startsWith("http")) ? currentText : "https://");
+
+            if (newLink !== null && newLink.trim() !== "" && newLink.trim() !== "https://") {
+                targetElement.textContent = newLink.trim();
+            } else if (newLink !== null && (newLink.trim() === "" || newLink.trim() === "https://")) { // User entered an empty string or just "https://"
+                alert("No valid link was entered. The placeholder remains unchanged.");
+                if (newLink.trim() === "") targetElement.textContent = '[Tikkie link]'; // Optionally revert if they clear it
+            }
+            // If newLink is null (user clicked cancel), do nothing.
+        }
+    });
+    // --- END OF ADDED EVENT LISTENER ---
 
   </script>
 </body>
