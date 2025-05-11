@@ -84,32 +84,28 @@
       box-shadow: 0 4px 12px rgba(139, 64, 80, 0.1);
     }
 
-    /* Added styles for the new Summary Order section */
     .summary-order-section {
       display: flex;
       flex-direction: column;
-      gap: 1rem; /* Same as form */
-      background: #F7D7E3; /* Same background as form */
-      padding: 1.5rem; /* Same padding as form */
-      border-radius: 12px; /* Same border-radius as form */
-      box-shadow: 0 4px 12px rgba(139, 64, 80, 0.1); /* Same box-shadow as form */
-      margin-top: 2rem; /* Space from the price display */
+      gap: 1rem;
+      background: #F7D7E3;
+      padding: 1.5rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(139, 64, 80, 0.1);
+      margin-top: 2rem;
     }
 
     .summary-order-section h2 {
       text-align: center;
-      color: #8B4050; /* Theme color */
-      font-size: 1.5rem; /* Adjusted size, smaller than H1 */
-      margin: 0 0 1rem 0; /* Adjusted margin, no top margin as parent has padding */
-      text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.3); /* Consistent with H1 */
-      /* Removing background from this h2 to let parent background show */
+      color: #8B4050;
+      font-size: 1.5rem;
+      margin: 0 0 1rem 0;
+      text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.3);
       background: none;
       box-shadow: none;
-      padding: 0; /* Reset padding if it inherited from generic h2 */
+      padding: 0;
     }
 
-    /* Added styles for input[type="date"] to match other inputs */
-    /* This is a new rule to adhere to "only add" constraint */
     input[type="date"] {
       width: 100%;
       padding: 0.8rem;
@@ -118,20 +114,17 @@
       font-size: 1rem;
       background: white;
       color: #8B4050;
-      font-family: Arial, sans-serif; /* Ensure font consistency */
+      font-family: Arial, sans-serif;
     }
-    /* Styling for placeholder text in date input (might need browser prefixes) */
     input[type="date"]::-webkit-calendar-picker-indicator {
         opacity: 0.6;
     }
     input[type="date"]:required:invalid::-webkit-datetime-edit {
-        color: #999; /* Light grey for placeholder text like "mm/dd/yyyy" */
+        color: #999;
     }
 
-
-    /* Added styles for the Summarise Order button */
     #summariseOrderBtn {
-      background-color: #8B4050; /* Main theme accent color */
+      background-color: #8B4050;
       color: white;
       padding: 0.8rem 1.5rem;
       border: none;
@@ -139,14 +132,70 @@
       font-size: 1rem;
       font-weight: 600;
       cursor: pointer;
-      margin-top: 1rem; /* Space above the button */
+      margin-top: 1rem;
       width: 100%;
       transition: background-color 0.3s ease;
     }
 
     #summariseOrderBtn:hover {
-      background-color: #A45069; /* Slightly lighter/different shade for hover */
+      background-color: #A45069;
     }
+
+    #orderSummaryOutputContainer {
+        margin-top: 1.5rem;
+        background: #E9E3F9;
+        padding: 1rem;
+        border-radius: 8px;
+    }
+
+    #orderSummaryOutput {
+        white-space: pre-wrap;
+        word-wrap: break-word;
+        font-family: Arial, sans-serif;
+        color: #8B4050;
+        font-size: 0.9rem;
+        line-height: 1.5;
+        margin-bottom: 1rem; /* Add some space before action buttons */
+    }
+
+    .topper-text-input {
+      margin-left: 0.5rem;
+      flex-grow: 1;
+      min-width: 100px;
+      width: auto;
+    }
+
+    /* --- ADDED CSS for summary action buttons --- */
+    #summaryActionsContainer {
+      display: flex;
+      gap: 0.75rem; /* Space between buttons */
+      align-items: center;
+      margin-top: 1rem; /* Space above the buttons, below the summary text */
+    }
+
+    #copySummaryBtn,
+    #generateTikkieBtn {
+      background-color: #8B4050; /* Main theme accent color */
+      color: white;
+      padding: 0.5rem 0.8rem; /* Smaller padding for smaller buttons */
+      border: none;
+      border-radius: 6px; /* Slightly smaller radius */
+      font-size: 0.85rem; /* Smaller font size */
+      font-weight: 500;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    #copySummaryBtn:hover,
+    #generateTikkieBtn:hover {
+      background-color: #A45069; /* Slightly lighter shade for hover */
+    }
+
+    #copySummaryBtn .icon {
+        margin-right: 0.3em; /* Space between icon and text if any */
+    }
+    /* --- END OF ADDED CSS --- */
+
   </style>
 </head>
 <body>
@@ -232,28 +281,37 @@
     </label>
     <label id="toppers1Label">Toppers 1
       <input type="checkbox" id="topper1">
+      <input type="text" id="topper1Text" placeholder="Optional details" class="topper-text-input hidden">
     </label>
     <label id="toppers2Label">Toppers 2
       <input type="checkbox" id="topper2">
+      <input type="text" id="topper2Text" placeholder="Optional details" class="topper-text-input hidden">
     </label>
   </form>
   <h2>Total Price: €<span id="totalPrice">0.00</span></h2>
 
-  <!-- Added Summary Order Section -->
   <div class="summary-order-section">
-    <h2>Summary Order</h2>
+    <h2>Order Details</h2>
     <label>Theme
-      <input type="text" id="theme" name="theme">
+      <input type="text" id="theme" name="theme" placeholder="e.g., Unicorn, Floral, Spiderman">
     </label>
     <label>Pickup Date
       <input type="date" id="pickupDate" name="pickupDate">
     </label>
-    <label>Alergies
-      <input type="text" id="alergies" name="alergies">
+    <label>Allergies / Special Requests
+      <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
     </label>
     <button type="button" id="summariseOrderBtn">Summarise Order</button>
+    <!-- --- MODIFIED: Added container for action buttons --- -->
+    <div id="orderSummaryOutputContainer" style="display: none;">
+      <pre id="orderSummaryOutput"></pre>
+      <div id="summaryActionsContainer">
+        <button id="copySummaryBtn" title="Copy Summary"><span class="icon">📋</span> Copy</button>
+        <button id="generateTikkieBtn">Generate Tikkie</button>
+      </div>
+    </div>
+    <!-- --- END OF MODIFICATION --- -->
   </div>
-  <!-- End of Added Summary Order Section -->
 
   <script>
     const form = document.getElementById('cakeForm');
@@ -303,7 +361,6 @@
           else price += 2 + Math.ceil((amount - 30) / 20) * 2;
         }
       }
-
       totalPriceEl.textContent = price.toFixed(2);
     }
 
@@ -312,10 +369,24 @@
       const prevType = typeSelect.dataset.prevType || '';
       const currentType = typeSelect.value;
 
+      const topper1Checkbox = document.getElementById('topper1');
+      const topper1TextInput = document.getElementById('topper1Text');
+      const topper2Checkbox = document.getElementById('topper2');
+      const topper2TextInput = document.getElementById('topper2Text');
+
       if (prevType && prevType !== currentType) {
         form.reset();
+        document.getElementById('theme').value = '';
+        document.getElementById('pickupDate').value = '';
+        document.getElementById('alergies').value = '';
+        topper1TextInput.value = '';
+        topper2TextInput.value = '';
+
         document.getElementById('type').value = currentType;
         document.getElementById('amount').value = 1;
+        if (document.getElementById('orderSummaryOutputContainer')) {
+            document.getElementById('orderSummaryOutputContainer').style.display = 'none';
+        }
       }
 
       typeSelect.dataset.prevType = currentType;
@@ -355,6 +426,17 @@
       if (!validSizes.includes(size.value)) {
         size.value = validSizes[0];
       }
+
+      const isCakeType = type === 'cake';
+      topper1TextInput.classList.toggle('hidden', !topper1Checkbox.checked || !isCakeType);
+      topper2TextInput.classList.toggle('hidden', !topper2Checkbox.checked || !isCakeType);
+
+      if (!topper1Checkbox.checked || !isCakeType) {
+        topper1TextInput.value = '';
+      }
+      if (!topper2Checkbox.checked || !isCakeType) {
+        topper2TextInput.value = '';
+      }
     }
 
     form.addEventListener('change', () => {
@@ -364,6 +446,180 @@
 
     updateVisibility();
     calculatePrice();
+
+    const summariseOrderBtn = document.getElementById('summariseOrderBtn');
+    const orderSummaryOutputContainer = document.getElementById('orderSummaryOutputContainer');
+    const orderSummaryOutput = document.getElementById('orderSummaryOutput');
+
+    summariseOrderBtn.addEventListener('click', () => {
+      calculatePrice();
+
+      const typeEl = document.getElementById('type');
+      const typeValue = typeEl.value;
+      const typeText = typeEl.options[typeEl.selectedIndex].text;
+
+      const amount = parseInt(document.getElementById('amount').value);
+      
+      const cakeStyleEl = document.getElementById('cakeStyle');
+      const cakeStyleText = cakeStyleEl.options[cakeStyleEl.selectedIndex].text;
+
+      const tasteEl = document.getElementById('taste');
+      const tasteText = tasteEl.options[tasteEl.selectedIndex].text;
+      
+      const sizeEl = document.getElementById('size');
+      const sizeText = sizeEl.options[sizeEl.selectedIndex].text;
+
+      const creamTopping = document.getElementById('creamTopping').checked;
+      const layers = parseInt(document.getElementById('layers').value);
+      const naturalColors = document.getElementById('naturalColors').checked;
+      const sprinkles = document.getElementById('sprinkles').checked;
+      const piping = document.getElementById('piping').checked;
+      
+      const lettersEl = document.getElementById('letters');
+      const lettersValue = lettersEl.value;
+      const lettersText = lettersEl.options[lettersEl.selectedIndex].text;
+      
+      const cakeName = document.getElementById('cakeName').value.trim();
+      const nuts = document.getElementById('nuts').checked;
+      const fruits = document.getElementById('fruits').checked;
+      
+      const layerFillingSelect = document.getElementById('layerFilling');
+      const layerFillingTexts = [...layerFillingSelect.options]
+                                .filter(o => o.selected)
+                                .map(o => o.text);
+
+      const topper1 = document.getElementById('topper1').checked;
+      const topper2 = document.getElementById('topper2').checked;
+      const topper1TextValue = document.getElementById('topper1Text').value.trim();
+      const topper2TextValue = document.getElementById('topper2Text').value.trim();
+
+      const theme = document.getElementById('theme').value.trim();
+      const pickupDateValue = document.getElementById('pickupDate').value;
+      const alergies = document.getElementById('alergies').value.trim();
+      const totalPrice = document.getElementById('totalPrice').textContent;
+
+      let summary = `Thanks so much for your interest in our custom ${typeValue === 'cake' ? '🎂 cake' : '🧁 cupcake'}! Based on your preferences, here’s your order summary:\n\n`;
+      summary += `📝 *Order Summary:*\n\n`;
+      summary += `✨ *Type:* ${typeText}\n`;
+      summary += `🔢 *Amount:* ${amount}\n`;
+      if (typeValue === 'cake') {
+        summary += `🎀 *Style:* ${cakeStyleText}\n`;
+      }
+      summary += `🍰 *Flavor:* ${tasteText}\n`;
+
+      if (typeValue === 'cake') {
+        summary += `📏 *Size:* ${sizeText}\n`;
+      } else {
+        summary += `🧁 *Cupcake Size:* ${sizeText}\n`;
+      }
+
+      if (theme) {
+        summary += `🎨 *Theme/Design:* ${theme}\n`;
+      }
+      
+      if (typeValue === 'cake') {
+        if (layers > 1) { 
+            summary += `겹 *Layers:* ${layers}\n`;
+        }
+        if (naturalColors) {
+          summary += `🌿 *Natural Colors:* Yes\n`;
+        }
+        if (sprinkles) {
+          summary += `✨ *Sprinkles:* Yes\n`;
+        }
+        if (piping) {
+          summary += `🍥 *Piping:* Yes\n`;
+        }
+        if (lettersValue !== 'no') {
+          summary += `🔤 *Letters on Cake:* ${lettersText}\n`;
+          if (cakeName) {
+            summary += `🏷️ *Name on Cake:* "${cakeName}"\n`;
+          }
+        }
+        if (nuts) {
+          summary += `🥜 *Nuts (decoration):* Yes\n`;
+        }
+        if (fruits) {
+          summary += `🍓 *Fruits (decoration):* Yes\n`;
+        }
+        if (layerFillingTexts.length > 0 && layers > 1) {
+          summary += `🍰겹 *Layer Fillings:* ${layerFillingTexts.join(', ')}\n`;
+        }
+        if (topper1) {
+          summary += `🎉 *Topper 1:* Yes`;
+          if (topper1TextValue) {
+            summary += ` (${topper1TextValue})`;
+          }
+          summary += `\n`;
+        }
+        if (topper2) {
+          summary += `🎊 *Topper 2:* Yes`;
+          if (topper2TextValue) {
+            summary += ` (${topper2TextValue})`;
+          }
+          summary += `\n`;
+        }
+      } else if (typeValue === 'cupcake') {
+        if (creamTopping) {
+          summary += `🍦 *Cream Topping:* Yes\n`;
+        }
+        if (naturalColors) {
+          summary += `🌿 *Natural Colors:* Yes\n`;
+        }
+      }
+
+      if (pickupDateValue) {
+        const dateParts = pickupDateValue.split('-');
+        const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+        summary += `🗓️ *Pickup Date:* ${formattedDate}\n`;
+      } else {
+        summary += `🗓️ *Pickup Date:* _Not specified_\n`;
+      }
+      
+      if (alergies) {
+        summary += `⚠️ *Allergies/Special Requests:* ${alergies}\n`;
+      }
+
+      summary += `\n💰 *Total Price:* €${totalPrice}\n\n`;
+      summary += `To confirm your order, please complete the payment via this Tikkie link:\n`;
+      summary += `👉 [Tikkie link]\n\n`;
+      summary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I’m here for you! 💬\n\n`;
+      summary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
+      summary += `Maayan (Manu) 🩷`;
+
+      orderSummaryOutput.textContent = summary;
+      orderSummaryOutputContainer.style.display = 'block';
+    });
+
+    // --- ADDED: Event listeners for new action buttons ---
+    const copySummaryBtn = document.getElementById('copySummaryBtn');
+    const generateTikkieBtn = document.getElementById('generateTikkieBtn');
+
+    copySummaryBtn.addEventListener('click', () => {
+      const summaryText = orderSummaryOutput.textContent;
+      if (navigator.clipboard && summaryText) {
+        navigator.clipboard.writeText(summaryText)
+          .then(() => {
+            const originalText = copySummaryBtn.innerHTML;
+            copySummaryBtn.innerHTML = 'Copied!';
+            setTimeout(() => {
+              copySummaryBtn.innerHTML = originalText;
+            }, 2000); // Reset after 2 seconds
+          })
+          .catch(err => {
+            console.error('Failed to copy text: ', err);
+            alert('Failed to copy text. Please try manually.');
+          });
+      } else {
+        alert('Clipboard API not available or no summary to copy.');
+      }
+    });
+
+    generateTikkieBtn.addEventListener('click', () => {
+      window.open('https://play.google.com/store/apps/details?id=com.abnamro.nl.tikkie&hl=en', '_blank');
+    });
+    // --- END OF ADDED EVENT LISTENERS ---
+
   </script>
 </body>
 </html>
