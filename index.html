@@ -194,6 +194,35 @@
         margin-right: 0.3em;
     }
 
+    /* --- CSS for Summarize Buttons --- */
+    #summarizeButtonsContainer {
+      display: flex;
+      gap: 0.75rem;
+      margin-top: 1rem; /* Matches original button margin-top */
+    }
+
+    .summary-action-btn {
+      background-color: #8B4050;
+      color: white;
+      padding: 0.8rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      flex: 1; /* Make buttons share the space */
+    }
+
+    .summary-action-btn:hover {
+      background-color: #A45069;
+    }
+    .summary-action-btn:disabled {
+      background-color: #A45069; /* Slightly different shade for disabled */
+      cursor: not-allowed;
+    }
+    /* --- End of CSS for Summarize Buttons --- */
+
     /* --- ADDED CSS for Tikkie placeholder --- */
     .tikkie-placeholder {
         color: #0066cc; /* A distinct link-like color */
@@ -310,7 +339,10 @@
     <label>Allergies / Special Requests
       <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
     </label>
-    <button type="button" id="summariseOrderBtn">Summarise Order</button>
+    <div id="summarizeButtonsContainer">
+        <button type="button" id="summariseOrderBtn" class="summary-action-btn">Summarise Order</button>
+        <button type="button" id="summariseOrderAIBtn" class="summary-action-btn">Summarise Order AI</button>
+    </div>
     <div id="orderSummaryOutputContainer" style="display: none;">
       <pre id="orderSummaryOutput"></pre>
       <div id="summaryActionsContainer">
@@ -506,7 +538,7 @@
       const alergies = document.getElementById('alergies').value.trim();
       const totalPrice = document.getElementById('totalPrice').textContent;
 
-      let summary = `Thanks so much for your interest in our custom ${typeValue === 'cake' ? '🎂 cake' : '🧁 cupcake'}! Based on your preferences, here’s your order summary:\n\n`;
+      let summary = `Thanks so much for your interest in our custom ${typeValue === 'cake' ? '🎂 cake' : '🧁 cupcake'}! Based on your preferences, here's your order summary:\n\n`;
       summary += `📝 *Order Summary:*\n\n`;
       summary += `✨ *Type:* ${typeText}\n`;
       summary += `🔢 *Amount:* ${amount}\n`;
@@ -593,7 +625,7 @@
       // --- MODIFIED: Wrap [Tikkie link] in a span ! ---
       summary += `👉 <span class="tikkie-placeholder">[Tikkie link]</span>\n\n`;
       // --- END OF MODIFICATION ---
-      summary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I’m here for you! 💬\n\n`;
+      summary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I'm here for you! 💬\n\n`;
       summary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
       summary += `Maayan (Manu) 🩷`;
 
@@ -650,6 +682,158 @@
         }
     });
     // --- END OF ADDED EVENT LISTENER ---
+
+    // --- Event listener for Summarise Order AI button ---
+    const summariseOrderAIBtn = document.getElementById('summariseOrderAIBtn');
+    summariseOrderAIBtn.addEventListener('click', async () => {
+      calculatePrice(); // Ensure price is current
+
+      // Gather data for the prompt
+      const typeEl = document.getElementById('type');
+      const typeValue = typeEl.value;
+      const amount = parseInt(document.getElementById('amount').value);
+      const cakeStyleValue = document.getElementById('cakeStyle').value;
+      const tasteValue = document.getElementById('taste').value;
+      const sizeValue = document.getElementById('size').value;
+      const creamTopping = document.getElementById('creamTopping').checked;
+      const layers = parseInt(document.getElementById('layers').value);
+      const naturalColors = document.getElementById('naturalColors').checked;
+      const sprinkles = document.getElementById('sprinkles').checked;
+      const piping = document.getElementById('piping').checked;
+      const lettersValue = document.getElementById('letters').value;
+      const cakeName = document.getElementById('cakeName').value.trim();
+      const nuts = document.getElementById('nuts').checked;
+      const fruits = document.getElementById('fruits').checked;
+      const layerFillingSelect = document.getElementById('layerFilling');
+      const layerFillingValues = [...layerFillingSelect.options]
+                                .filter(o => o.selected)
+                                .map(o => o.value);
+      const topper1 = document.getElementById('topper1').checked;
+      const topper1TextValue = document.getElementById('topper1Text').value.trim();
+      const topper2 = document.getElementById('topper2').checked;
+      const topper2TextValue = document.getElementById('topper2Text').value.trim();
+      const theme = document.getElementById('theme').value.trim();
+      const pickupDateValue = document.getElementById('pickupDate').value;
+      const alergies = document.getElementById('alergies').value.trim();
+      const totalPrice = document.getElementById('totalPrice').textContent;
+
+      // Construct the prompt
+      let promptString = `You are a helpful assistant specialized in summarizing cake orders for customers.
+
+Based on the following information, generate a concise and friendly summary of the order.
+Include all relevant details about the cake, such as type, amount, flavor, size, and decorations.
+Also, include the pickup date, any allergies or special requests, and the total price.
+
+Type: ${typeValue}
+Amount: ${amount}
+`;
+      if (typeValue === 'cake') {
+        promptString += `Cake Style: ${cakeStyleValue}\n`;
+      }
+      promptString += `Taste: ${tasteValue}\n`;
+      promptString += `Size: ${sizeValue}\n`;
+
+      if (typeValue === 'cupcake' && creamTopping) {
+        promptString += `Cream Topping: Yes\n`;
+      }
+      if (typeValue === 'cake') { // Layers are always present for a cake, min 1
+        promptString += `Layers: ${layers}\n`;
+      }
+      if (naturalColors) {
+        promptString += `Natural Colors: Yes\n`;
+      }
+      if (typeValue === 'cake' && sprinkles) {
+        promptString += `Sprinkles: Yes\n`;
+      }
+      if (typeValue === 'cake' && piping) {
+        promptString += `Piping: Yes\n`;
+      }
+      if (typeValue === 'cake' && lettersValue && lettersValue !== 'no') {
+        promptString += `Letters: ${lettersValue}\n`;
+        if (cakeName) {
+          promptString += `Cake Name: "${cakeName}"\n`;
+        }
+      }
+      if (typeValue === 'cake' && nuts) {
+        promptString += `Nuts (decoration): Yes\n`;
+      }
+      if (typeValue === 'cake' && fruits) {
+        promptString += `Fruits (decoration): Yes\n`;
+      }
+      if (typeValue === 'cake' && layerFillingValues.length > 0 && layers > 1) {
+        promptString += `Layer Fillings: ${layerFillingValues.join(', ')}\n`;
+      }
+      if (typeValue === 'cake' && topper1) {
+        promptString += `Topper 1: Yes`;
+        if (topper1TextValue) promptString += ` (${topper1TextValue})`;
+        promptString += `\n`;
+      }
+      if (typeValue === 'cake' && topper2) {
+        promptString += `Topper 2: Yes`;
+        if (topper2TextValue) promptString += ` (${topper2TextValue})`;
+        promptString += `\n`;
+      }
+      if (theme) {
+        promptString += `Theme/Design: ${theme}\n`;
+      }
+      if (pickupDateValue) {
+        const dateParts = pickupDateValue.split('-');
+        const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+        promptString += `Pickup Date: ${formattedDate}\n`;
+      }
+      if (alergies) {
+        promptString += `Allergies/Special Requests: ${alergies}\n`;
+      }
+      promptString += `Total Price: €${totalPrice}\n`;
+
+      // UI updates for loading state
+      summariseOrderAIBtn.disabled = true;
+      summariseOrderAIBtn.textContent = 'Generating...';
+      orderSummaryOutput.textContent = 'Generating AI summary, please wait...';
+      orderSummaryOutputContainer.style.display = 'block';
+
+      try {
+        const response = await fetch('https://gemini-api-worker.orierezori.workers.dev/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ prompt: promptString }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.text();
+          throw new Error(`API request failed: ${response.status} ${response.statusText}. Response: ${errorData}`);
+        }
+
+        const result = await response.json();
+        if (result && result.response) {
+          // To make the Tikkie link part consistent, we can add it here as well or instruct the AI.
+          // For now, just displaying AI response.
+          // If the AI includes the "Tikkie link" phrase, the existing click listener for it might work.
+          let aiSummary = result.response;
+          // Check if the Tikkie placeholder needs to be added or if the AI handles it.
+          // For now, assuming AI might generate a full message that could include it.
+          // If we want to ensure the interactive Tikkie link:
+          // aiSummary += `\n\nTo confirm your order, please complete the payment via this Tikkie link:\n`;
+          // aiSummary += `👉 <span class="tikkie-placeholder">[Tikkie link]</span>\n\n`;
+          // aiSummary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I'm here for you! 💬\n\n`;
+          // aiSummary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
+          // aiSummary += `Maayan (Manu) 🩷`;
+          // orderSummaryOutput.innerHTML = aiSummary; // Use innerHTML if adding span
+          orderSummaryOutput.textContent = aiSummary; // Use textContent if AI response is plain text
+        } else {
+          orderSummaryOutput.textContent = 'Failed to get a valid summary from AI. Response structure might be incorrect.';
+        }
+      } catch (error) {
+        console.error('Error calling AI summary API:', error);
+        orderSummaryOutput.textContent = `Error generating AI summary: ${error.message}`;
+      } finally {
+        summariseOrderAIBtn.disabled = false;
+        summariseOrderAIBtn.textContent = 'Summarise Order AI';
+      }
+    });
+    // --- END OF ADDED EVENT LISTENER --- 
 
   </script>
 </body>
