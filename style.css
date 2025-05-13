@@ -116,24 +116,6 @@
         color: #999;
     }
 
-    #summariseOrderBtn {
-      background-color: #8B4050;
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      margin-top: 1rem;
-      width: 100%;
-      transition: background-color 0.3s ease;
-    }
-
-    #summariseOrderBtn:hover {
-      background-color: #A45069;
-    }
-
     #orderSummaryOutputContainer {
         margin-top: 1.5rem;
         background: #E9E3F9;
