@@ -815,13 +815,13 @@ Amount: ${amount}
           // Check if the Tikkie placeholder needs to be added or if the AI handles it.
           // For now, assuming AI might generate a full message that could include it.
           // If we want to ensure the interactive Tikkie link:
-          // aiSummary += `\n\nTo confirm your order, please complete the payment via this Tikkie link:\n`;
-          // aiSummary += `👉 <span class="tikkie-placeholder">[Tikkie link]</span>\n\n`;
-          // aiSummary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I'm here for you! 💬\n\n`;
-          // aiSummary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
-          // aiSummary += `Maayan (Manu) 🩷`;
-          // orderSummaryOutput.innerHTML = aiSummary; // Use innerHTML if adding span
-          orderSummaryOutput.textContent = aiSummary; // Use textContent if AI response is plain text
+          aiSummary += `\n\nTo confirm your order, please complete the payment via the Tikkie link below.\n`;
+          aiSummary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I'm here for you! 💬\n\n`;
+          aiSummary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
+          aiSummary += `Maayan (Manu) 🩷\n`;
+          aiSummary += `Payment Link:\n\n`;
+          aiSummary += `<span class="tikkie-placeholder">[Tikkie link]</span>`;
+          orderSummaryOutput.innerHTML = aiSummary; // Use innerHTML if adding span
         } else {
           orderSummaryOutput.textContent = 'Failed to get a valid summary from AI. Response structure might be incorrect.';
         }
