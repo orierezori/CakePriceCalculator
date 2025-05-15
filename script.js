@@ -550,9 +550,12 @@ To confirm your order, please complete the payment via the Tikkie link below.
             return;
         }
 
-        const eventTitle = `Cake Pickup: ${data.theme || (data.typeText + (data.type === 'cake' ? ' Cake' : ' Cupcakes'))}`;
-        const startDate = data.pickupDate.replace(/-/g, '');
-        const endDate = startDate;
+        const eventTitle = `${data.typeText} Pickup${data.theme ? " " + data.theme : ""}`;
+        const baseDate = data.pickupDate.replace(/-/g, ''); // YYYYMMDD
+        const startTime = '120000'; // 12:00:00 PM
+        const endTime = '130000';   // 1:00:00 PM (1 hour duration)
+        const calendarStartDate = baseDate + 'T' + startTime;
+        const calendarEndDate = baseDate + 'T' + endTime;
 
         let eventDetails = `Order Summary:\nType: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
         if (data.type === 'cake') {
@@ -565,7 +568,7 @@ To confirm your order, please complete the payment via the Tikkie link below.
         if (data.alergies) eventDetails += `Allergies/Requests: ${data.alergies}\n`;
         eventDetails += `Total Price: €${data.totalPriceText}`;
 
-        const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(eventDetails)}`;
+        const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${calendarStartDate}/${calendarEndDate}&details=${encodeURIComponent(eventDetails)}`;
         
         window.open(calendarUrl, '_blank');
     });
