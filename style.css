@@ -273,6 +273,13 @@ input[type="date"]:required:invalid::-webkit-datetime-edit {
   flex-wrap: wrap; /* Allow buttons to wrap on small screens */
 }
 
+/* General icon styling for buttons within specified containers */
+#summaryActionsContainer button .icon,
+#summarizeButtonsContainer .summary-action-btn .icon {
+    margin-right: 0.4em; /* Adjust spacing */
+    font-size: 1.1em; /* Make icon slightly larger */
+}
+
 #copySummaryBtn,
 #generateTikkieBtn,
 #addToCalendarBtn,
@@ -305,11 +312,6 @@ input[type="date"]:required:invalid::-webkit-datetime-edit {
 #addToCalendarBtn:hover,
 #addTaskBtn:hover {
   background-color: var(--button-primary-hover-bg);
-}
-
-#copySummaryBtn .icon {
-    margin-right: 0.4em; /* Adjust spacing */
-    font-size: 1.1em; /* Make icon slightly larger */
 }
 
 #summarizeButtonsContainer {
