@@ -257,7 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
 `;
             }
             if (data.piping) {
-                summary += `🍥 *Piping:* Yes
+                summary += `🍥 *Cream Decoration:* Yes
 `;
             }
             if (data.letters !== 'no') {
@@ -401,7 +401,7 @@ Amount: ${data.amount}
 `;
         }
         if (data.type === 'cake' && data.piping) {
-            promptString += `Piping: Yes
+            promptString += `Cream Decoration: Yes
 `;
         }
         if (data.type === 'cake' && data.letters && data.letters !== 'no') {
