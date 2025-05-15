@@ -208,7 +208,8 @@
 
     #copySummaryBtn,
     #generateTikkieBtn,
-    #addToCalendarBtn {
+    #addToCalendarBtn,
+    #addTaskBtn {
       background-color: #8B4050; /* Keep existing color for now */
       color: white;
       padding: 0.6rem 1rem; /* Increased padding */
@@ -226,14 +227,16 @@
     }
      #copySummaryBtn:active,
     #generateTikkieBtn:active,
-    #addToCalendarBtn:active {
+    #addToCalendarBtn:active,
+    #addTaskBtn:active {
         transform: translateY(1px); /* Subtle press effect */
     }
 
 
     #copySummaryBtn:hover,
     #generateTikkieBtn:hover,
-    #addToCalendarBtn:hover {
+    #addToCalendarBtn:hover,
+    #addTaskBtn:hover {
       background-color: #A45069; /* Keep existing color */
     }
 

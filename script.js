@@ -40,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const copySummaryBtn = document.getElementById('copySummaryBtn');
     const generateTikkieBtn = document.getElementById('generateTikkieBtn');
     const addToCalendarBtn = document.getElementById('addToCalendarBtn');
+    const addTaskBtn = document.getElementById('addTaskBtn');
 
     // Helper to get selected options text for a select element
     function getSelectedOptionText(selectElement) {
@@ -567,6 +568,50 @@ To confirm your order, please complete the payment via the Tikkie link below.
         const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(eventDetails)}`;
         
         window.open(calendarUrl, '_blank');
+    });
+
+    addTaskBtn.addEventListener('click', () => {
+        const data = getFormData();
+
+        const taskTitle = `Cake Order: ${data.theme || (data.typeText + (data.type === 'cake' ? ' Cake' : ' Cupcakes'))}`;
+        
+        let taskDetails = `Type: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
+        if (data.type === 'cake') {
+            taskDetails += `Style: ${data.cakeStyleText}\nSize: ${data.sizeText}\nLayers: ${data.layers}\n`;
+        } else {
+            taskDetails += `Cupcake Size: ${data.sizeText}\n`;
+        }
+        if (data.theme) taskDetails += `Theme: ${data.theme}\n`;
+        if (data.cakeName) taskDetails += `Name on Cake: ${data.cakeName}\n`;
+        if (data.alergies) taskDetails += `Allergies/Requests: ${data.alergies}\n`;
+        if (data.pickupDate) {
+            const dateParts = data.pickupDate.split('-');
+            const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
+            taskDetails += `Pickup Date: ${formattedDate}\n`;
+        }
+        taskDetails += `Total Price: €${data.totalPriceText}\n\n`;
+
+        taskDetails += "Order Details copied to clipboard. Please paste into Google Tasks in your 'Work Manu Vegan' list.";
+
+        const textToCopy = `Title: ${taskTitle}\n\nDetails:\n${taskDetails}`;
+
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(textToCopy)
+                .then(() => {
+                    alert("Task details copied to clipboard! Opening Google Tasks. Please create a new task in your 'Work Manu Vegan' list and paste the details.");
+                    window.open('https://tasks.google.com/embed/frame?', '_blank');
+                })
+                .catch(err => {
+                    console.error('Failed to copy task details: ', err);
+                    alert('Failed to copy task details. Please try manually. Opening Google Tasks.');
+                    window.open('https://tasks.google.com/embed/frame?', '_blank');
+                });
+        } else {
+            alert('Clipboard API not available. Opening Google Tasks. Please manually copy details.');
+            window.open('https://tasks.google.com/embed/frame?', '_blank');
+            // Fallback for manual copy if needed - perhaps show details in a prompt
+            prompt("Copy these details for your task:", textToCopy);
+        }
     });
 
     orderSummaryOutput.addEventListener('click', function (event) {
