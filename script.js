@@ -32,6 +32,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const orderSummaryOutput = document.getElementById('orderSummaryOutput');
     const copySummaryBtn = document.getElementById('copySummaryBtn');
     const generateTikkieBtn = document.getElementById('generateTikkieBtn');
+    const addToCalendarBtn = document.getElementById('addToCalendarBtn');
 
     // Helper to get selected options text for a select element
     function getSelectedOptionText(selectElement) {
@@ -470,6 +471,33 @@ To confirm your order, please complete the payment via the Tikkie link below.
 
     generateTikkieBtn.addEventListener('click', () => {
         window.open('https://play.google.com/store/apps/details?id=com.abnamro.nl.tikkie&hl=en', '_blank');
+    });
+
+    addToCalendarBtn.addEventListener('click', () => {
+        const data = getFormData();
+        if (!data.pickupDate) {
+            alert("Please select a pickup date first.");
+            return;
+        }
+
+        const eventTitle = `Cake Pickup: ${data.theme || (data.typeText + (data.type === 'cake' ? ' Cake' : ' Cupcakes'))}`;
+        const startDate = data.pickupDate.replace(/-/g, '');
+        const endDate = startDate;
+
+        let eventDetails = `Order Summary:\nType: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
+        if (data.type === 'cake') {
+            eventDetails += `Style: ${data.cakeStyleText}\nSize: ${data.sizeText}\nLayers: ${data.layers}\n`;
+        } else {
+            eventDetails += `Cupcake Size: ${data.sizeText}\n`;
+        }
+        if (data.theme) eventDetails += `Theme: ${data.theme}\n`;
+        if (data.cakeName) eventDetails += `Name on Cake: ${data.cakeName}\n`;
+        if (data.alergies) eventDetails += `Allergies/Requests: ${data.alergies}\n`;
+        eventDetails += `Total Price: €${data.totalPriceText}`;
+
+        const calendarUrl = `https://www.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(eventTitle)}&dates=${startDate}/${endDate}&details=${encodeURIComponent(eventDetails)}`;
+        
+        window.open(calendarUrl, '_blank');
     });
 
     orderSummaryOutput.addEventListener('click', function (event) {

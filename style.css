@@ -207,7 +207,8 @@
     }
 
     #copySummaryBtn,
-    #generateTikkieBtn {
+    #generateTikkieBtn,
+    #addToCalendarBtn {
       background-color: #8B4050; /* Keep existing color for now */
       color: white;
       padding: 0.6rem 1rem; /* Increased padding */
@@ -224,13 +225,15 @@
       flex-grow: 1; /* Allow them to grow */
     }
      #copySummaryBtn:active,
-    #generateTikkieBtn:active {
+    #generateTikkieBtn:active,
+    #addToCalendarBtn:active {
         transform: translateY(1px); /* Subtle press effect */
     }
 
 
     #copySummaryBtn:hover,
-    #generateTikkieBtn:hover {
+    #generateTikkieBtn:hover,
+    #addToCalendarBtn:hover {
       background-color: #A45069; /* Keep existing color */
     }
 
