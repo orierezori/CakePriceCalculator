@@ -22,6 +22,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const topper2El = document.getElementById('topper2');
     const topper2TextEl = document.getElementById('topper2Text');
 
+    // New elements for custom addition and discount
+    const customAdditionEl = document.getElementById('customAddition');
+    const customAdditionTextEl = document.getElementById('customAdditionText');
+    const customAdditionPriceEl = document.getElementById('customAdditionPrice');
+    const discountEl = document.getElementById('discount');
+    const discountAmountEl = document.getElementById('discountAmount');
+
     const themeEl = document.getElementById('theme');
     const pickupDateEl = document.getElementById('pickupDate');
     const alergiesEl = document.getElementById('alergies');
@@ -67,6 +74,11 @@ document.addEventListener('DOMContentLoaded', () => {
             topper1Text: topper1TextEl.value.trim(),
             topper2: topper2El.checked,
             topper2Text: topper2TextEl.value.trim(),
+            customAddition: customAdditionEl.checked,
+            customAdditionText: customAdditionTextEl.value.trim(),
+            customAdditionPrice: parseFloat(customAdditionPriceEl.value) || 0,
+            discount: discountEl.checked,
+            discountAmount: parseFloat(discountAmountEl.value) || 0,
             theme: themeEl.value.trim(),
             pickupDate: pickupDateEl.value,
             alergies: alergiesEl.value.trim(),
@@ -102,6 +114,20 @@ document.addEventListener('DOMContentLoaded', () => {
                 else price += 2 + Math.ceil((data.amount - 30) / 20) * 2;
             }
         }
+
+        // Apply custom addition price
+        if (data.customAddition && data.customAdditionPrice > 0) {
+            price += data.customAdditionPrice;
+        }
+
+        // Apply discount
+        if (data.discount && data.discountAmount > 0) {
+            price -= data.discountAmount;
+        }
+
+        // Ensure price doesn't go below zero
+        price = Math.max(0, price);
+
         totalPriceEl.textContent = price.toFixed(2);
     }
 
@@ -116,6 +142,11 @@ document.addEventListener('DOMContentLoaded', () => {
             alergiesEl.value = '';
             topper1TextEl.value = '';
             topper2TextEl.value = '';
+            customAdditionEl.checked = false; // Reset new fields
+            customAdditionTextEl.value = '';
+            customAdditionPriceEl.value = '';
+            discountEl.checked = false;
+            discountAmountEl.value = '';
 
             typeEl.value = currentType;
             amountEl.value = 1;
@@ -166,6 +197,20 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (!topper2El.checked || !isCakeType) {
             topper2TextEl.value = '';
+        }
+
+        // Visibility for custom addition
+        customAdditionTextEl.classList.toggle('hidden', !customAdditionEl.checked);
+        customAdditionPriceEl.classList.toggle('hidden', !customAdditionEl.checked);
+        if (!customAdditionEl.checked) {
+            customAdditionTextEl.value = '';
+            customAdditionPriceEl.value = '';
+        }
+
+        // Visibility for discount
+        discountAmountEl.classList.toggle('hidden', !discountEl.checked);
+        if (!discountEl.checked) {
+            discountAmountEl.value = '';
         }
     }
 
@@ -260,6 +305,18 @@ document.addEventListener('DOMContentLoaded', () => {
                 summary += `🌿 *Natural Colors:* Yes
 `;
             }
+        }
+
+        // Custom Addition
+        if (data.customAddition && data.customAdditionText && data.customAdditionPrice > 0) {
+            summary += `➕ *Custom Addition:* ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})
+`;
+        }
+
+        // Discount
+        if (data.discount && data.discountAmount > 0) {
+            summary += `➖ *Discount Applied:* -€${data.discountAmount.toFixed(2)}
+`;
         }
 
         if (data.pickupDate) {
@@ -395,6 +452,18 @@ Amount: ${data.amount}
         }
         promptString += `Total Price: €${data.totalPriceText}
 `;
+
+        // Add custom addition to prompt
+        if (data.customAddition && data.customAdditionText && data.customAdditionPrice > 0) {
+            promptString += `Custom Addition: ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})
+`;
+        }
+
+        // Add discount to prompt
+        if (data.discount && data.discountAmount > 0) {
+            promptString += `Discount Applied: -€${data.discountAmount.toFixed(2)})
+`;
+        }
 
         // UI updates for loading state
         summariseOrderAIBtn.disabled = true;

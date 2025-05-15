@@ -95,6 +95,15 @@
       <input type="checkbox" id="topper2">
       <input type="text" id="topper2Text" placeholder="Optional details" class="topper-text-input hidden">
     </label>
+    <label id="customAdditionLabel">Custom Addition
+      <input type="checkbox" id="customAddition">
+      <input type="text" id="customAdditionText" placeholder="Description" class="topper-text-input hidden">
+      <input type="number" id="customAdditionPrice" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01">
+    </label>
+    <label id="discountLabel">Discount
+      <input type="checkbox" id="discount">
+      <input type="number" id="discountAmount" placeholder="Amount" class="topper-text-input hidden" min="0" step="0.01">
+    </label>
   </form>
   <h2>Total Price: €<span id="totalPrice">0.00</span></h2>
 
