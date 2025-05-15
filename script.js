@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // Cache DOM elements
     const cakeForm = document.getElementById('cakeForm');
-    const totalPriceEl = document.getElementById('totalPrice');
+    const totalPriceEl = document.getElementById('totalPriceOutput');
     const typeEl = document.getElementById('type');
     const amountEl = document.getElementById('amount');
     const cakeStyleEl = document.getElementById('cakeStyle');
@@ -91,28 +91,51 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = getFormData();
         let price = 0;
 
+        // Pricing constants
+        const CAKE_BASE_PRICE_18 = 30;
+        const CAKE_BASE_PRICE_20 = 35;
+        const CAKE_LAYER_INCREMENT = 10;
+        const CAKE_NATURAL_COLORS_PRICE = 2;
+        const CAKE_SPRINKLES_PRICE = 3;
+        const CAKE_PIPING_CLASSIC_PRICE = 7;
+        const CAKE_PIPING_CUSTOM_PRICE = 15;
+        const CAKE_LETTERS_SMALL_PRICE_PER_CHAR = 0.2;
+        const CAKE_LETTERS_BIG_PRICE_PER_CHAR = 0.5;
+        const CAKE_NUTS_PRICE = 5;
+        const CAKE_FRUITS_PRICE = 5;
+        const CAKE_FILLING_JAM_PRICE = 1;
+        const CAKE_FILLING_OTHER_PRICE = 1.5;
+        const CAKE_TOPPER_PRICE = 10;
+
+        const CUPCAKE_MINI_PRICE = 2;
+        const CUPCAKE_REGULAR_PRICE = 4;
+        const CUPCAKE_CREAM_TOPPING_PRICE_PER_UNIT = 0.5;
+        const CUPCAKE_NATURAL_COLORS_TIER1_PRICE = 1; // up to 12
+        const CUPCAKE_NATURAL_COLORS_TIER2_PRICE = 2; // up to 30
+        const CUPCAKE_NATURAL_COLORS_ADDITIONAL_PRICE_PER_20 = 2; // for > 30
+
         if (data.type === 'cake') {
-            price += data.size === '18' ? 30 : 35;
-            price += (data.layers - 1) * 10;
-            if (data.naturalColors) price += 2;
-            if (data.sprinkles) price += 3;
-            if (data.piping) price += data.cakeStyle === 'classic' ? 7 : 15;
-            if (data.letters !== 'no') price += (data.letters === 'small' ? 0.2 : 0.5) * data.cakeName.length;
-            if (data.nuts) price += 5;
-            if (data.fruits) price += 5;
+            price += data.size === '18' ? CAKE_BASE_PRICE_18 : CAKE_BASE_PRICE_20;
+            price += (data.layers - 1) * CAKE_LAYER_INCREMENT;
+            if (data.naturalColors) price += CAKE_NATURAL_COLORS_PRICE;
+            if (data.sprinkles) price += CAKE_SPRINKLES_PRICE;
+            if (data.piping) price += data.cakeStyle === 'classic' ? CAKE_PIPING_CLASSIC_PRICE : CAKE_PIPING_CUSTOM_PRICE;
+            if (data.letters !== 'no') price += (data.letters === 'small' ? CAKE_LETTERS_SMALL_PRICE_PER_CHAR : CAKE_LETTERS_BIG_PRICE_PER_CHAR) * data.cakeName.length;
+            if (data.nuts) price += CAKE_NUTS_PRICE;
+            if (data.fruits) price += CAKE_FRUITS_PRICE;
             if (data.layers > 1 && data.layerFillingValues.length > 0) {
-                const totalFilling = data.layerFillingValues.reduce((sum, fill) => sum + (fill === 'jam' ? 1 : 1.5), 0);
+                const totalFilling = data.layerFillingValues.reduce((sum, fill) => sum + (fill === 'jam' ? CAKE_FILLING_JAM_PRICE : CAKE_FILLING_OTHER_PRICE), 0);
                 price += (data.layers - 1) * totalFilling;
             }
-            if (data.topper1) price += 10;
-            if (data.topper2) price += 10;
+            if (data.topper1) price += CAKE_TOPPER_PRICE;
+            if (data.topper2) price += CAKE_TOPPER_PRICE; // Assuming topper2 has the same price
         } else { // Cupcake
-            price += data.size === 'mini' ? 2 * data.amount : 4 * data.amount;
-            if (data.creamTopping) price += 0.5 * data.amount;
+            price += data.size === 'mini' ? CUPCAKE_MINI_PRICE * data.amount : CUPCAKE_REGULAR_PRICE * data.amount;
+            if (data.creamTopping) price += CUPCAKE_CREAM_TOPPING_PRICE_PER_UNIT * data.amount;
             if (data.naturalColors) {
-                if (data.amount <= 12) price += 1;
-                else if (data.amount <= 30) price += 2;
-                else price += 2 + Math.ceil((data.amount - 30) / 20) * 2;
+                if (data.amount <= 12) price += CUPCAKE_NATURAL_COLORS_TIER1_PRICE;
+                else if (data.amount <= 30) price += CUPCAKE_NATURAL_COLORS_TIER2_PRICE;
+                else price += CUPCAKE_NATURAL_COLORS_TIER2_PRICE + Math.ceil((data.amount - 30) / 20) * CUPCAKE_NATURAL_COLORS_ADDITIONAL_PRICE_PER_20;
             }
         }
 
@@ -132,48 +155,51 @@ document.addEventListener('DOMContentLoaded', () => {
         totalPriceEl.textContent = price.toFixed(2);
     }
 
-    function updateVisibility() {
-        const currentType = typeEl.value;
-        const prevType = typeEl.dataset.prevType || '';
+    // --- Visibility Logic Refactor ---
 
+    function resetFormFieldsOnTypeChange(currentType, prevType) {
         if (prevType && prevType !== currentType) {
-            cakeForm.reset();
-            themeEl.value = '';
-            pickupDateEl.value = '';
-            alergiesEl.value = '';
+            // Preserve values before reset
+            const themeValue = themeEl.value;
+            const pickupDateValue = pickupDateEl.value;
+            const alergiesValue = alergiesEl.value;
+
+            cakeForm.reset(); // Resets all form fields to their defaults
+
+            // Restore non-form specific fields if needed, or clear them explicitly
+            themeEl.value = themeValue; // Or clear: themeEl.value = '';
+            pickupDateEl.value = pickupDateValue; // Or clear: pickupDateEl.value = '';
+            alergiesEl.value = alergiesValue; // Or clear: alergiesEl.value = '';
+            
+            // Explicitly reset fields that might not be part of cakeForm.elements or need special handling
             topper1TextEl.value = '';
             topper2TextEl.value = '';
-            customAdditionEl.checked = false; // Reset new fields
+            customAdditionEl.checked = false;
             customAdditionTextEl.value = '';
             customAdditionPriceEl.value = '';
             discountEl.checked = false;
             discountAmountEl.value = '';
+            
+            typeEl.value = currentType; // Set the type back to the selected one
+            amountEl.value = 1; // Default amount
 
-            typeEl.value = currentType;
-            amountEl.value = 1;
             if (orderSummaryOutputContainer) {
                 orderSummaryOutputContainer.style.display = 'none';
             }
+            return true; // Indicates a reset happened
         }
+        return false; // No reset happened
+    }
 
-        typeEl.dataset.prevType = currentType;
-
-        const layersValue = parseInt(layersEl.value);
-        const lettersValue = lettersEl.value;
-
+    function updateTypeSpecificVisibility(currentType) {
         const cakeOnlyIds = ["cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppers1Label", "toppers2Label"];
         const cupcakeOnlyIds = ["creamToppingLabel"];
 
         cakeOnlyIds.forEach(id => document.getElementById(id).classList.toggle('hidden', currentType !== 'cake'));
         cupcakeOnlyIds.forEach(id => document.getElementById(id).classList.toggle('hidden', currentType !== 'cupcake'));
+    }
 
-        document.getElementById('layerFillingLabel').classList.toggle('hidden', currentType !== 'cake' || layersValue === 1);
-
-        const nameLabel = document.getElementById('nameLabel');
-        const hideName = currentType !== 'cake' || lettersValue === 'no';
-        nameLabel.classList.toggle('hidden', hideName);
-        if (hideName) cakeNameEl.value = '';
-
+    function updateTasteAndSizeOptions(currentType) {
         Array.from(tasteEl.options).forEach(opt => {
             opt.disabled = (currentType === 'cake' && (opt.value === 'carrot' || opt.value === 'orange'));
         });
@@ -182,25 +208,35 @@ document.addEventListener('DOMContentLoaded', () => {
         Array.from(sizeEl.options).forEach(opt => {
             const isValid = validSizes.includes(opt.value);
             opt.hidden = !isValid;
-            opt.disabled = !isValid;
+            opt.disabled = !isValid; // Also disable to prevent submission if somehow visible
         });
 
         if (!validSizes.includes(sizeEl.value)) {
-            sizeEl.value = validSizes[0];
+            sizeEl.value = validSizes[0]; // Default to first valid size
         }
+    }
 
+    function updateConditionalFieldVisibility(currentType) {
+        const layersValue = parseInt(layersEl.value);
+        const lettersValue = lettersEl.value;
         const isCakeType = currentType === 'cake';
+
+        // Layer Filling visibility
+        document.getElementById('layerFillingLabel').classList.toggle('hidden', !isCakeType || layersValue <= 1);
+
+        // Name Label visibility
+        const nameLabel = document.getElementById('nameLabel');
+        const hideName = !isCakeType || lettersValue === 'no';
+        nameLabel.classList.toggle('hidden', hideName);
+        if (hideName) cakeNameEl.value = '';
+
+        // Topper text fields
         topper1TextEl.classList.toggle('hidden', !topper1El.checked || !isCakeType);
         topper2TextEl.classList.toggle('hidden', !topper2El.checked || !isCakeType);
-
-        if (!topper1El.checked || !isCakeType) {
-            topper1TextEl.value = '';
-        }
-        if (!topper2El.checked || !isCakeType) {
-            topper2TextEl.value = '';
-        }
-
-        // Visibility for custom addition
+        if (!topper1El.checked || !isCakeType) topper1TextEl.value = '';
+        if (!topper2El.checked || !isCakeType) topper2TextEl.value = '';
+        
+        // Custom Addition text and price fields
         customAdditionTextEl.classList.toggle('hidden', !customAdditionEl.checked);
         customAdditionPriceEl.classList.toggle('hidden', !customAdditionEl.checked);
         if (!customAdditionEl.checked) {
@@ -208,148 +244,125 @@ document.addEventListener('DOMContentLoaded', () => {
             customAdditionPriceEl.value = '';
         }
 
-        // Visibility for discount
+        // Discount amount field
         discountAmountEl.classList.toggle('hidden', !discountEl.checked);
         if (!discountEl.checked) {
             discountAmountEl.value = '';
         }
     }
 
+    function updateVisibility() {
+        const currentType = typeEl.value;
+        const prevType = typeEl.dataset.prevType || '';
+
+        if (resetFormFieldsOnTypeChange(currentType, prevType)) {
+            // If form was reset, prevType needs to be updated for the current run
+            typeEl.dataset.prevType = currentType;
+            // Recalculate price and update visibility again to ensure correct state after reset
+            updateTypeSpecificVisibility(currentType);
+            updateTasteAndSizeOptions(currentType);
+            updateConditionalFieldVisibility(currentType);
+            calculatePrice(); 
+            return; // Exit early as everything is set post-reset
+        }
+        typeEl.dataset.prevType = currentType;
+
+        updateTypeSpecificVisibility(currentType);
+        updateTasteAndSizeOptions(currentType);
+        updateConditionalFieldVisibility(currentType);
+    }
+    // --- End of Visibility Logic Refactor ---
+
     function generateStandardSummaryText(data) {
         let summary = `Thanks so much for your interest in our custom ${data.type === 'cake' ? '🎂 cake' : '🧁 cupcake'}! Based on your preferences, here's your order summary:\n\n`;
-        summary += `📝 *Order Summary:*
-
-`;
-        summary += `✨ *Type:* ${data.typeText}
-`;
-        summary += `🔢 *Amount:* ${data.amount}
-`;
+        summary += `📝 *Order Summary:*\n\n`;
+        summary += `✨ *Type:* ${data.typeText}\n`;
+        summary += `🔢 *Amount:* ${data.amount}\n`;
         if (data.type === 'cake') {
-            summary += `🎀 *Style:* ${data.cakeStyleText}
-`;
+            summary += `🎀 *Style:* ${data.cakeStyleText}\n`;
         }
-        summary += `🍰 *Flavor:* ${data.tasteText}
-`;
+        summary += `🍰 *Flavor:* ${data.tasteText}\n`;
 
         if (data.type === 'cake') {
-            summary += `📏 *Size:* ${data.sizeText}
-`;
+            summary += `📏 *Size:* ${data.sizeText}\n`;
         } else {
-            summary += `🧁 *Cupcake Size:* ${data.sizeText}
-`;
+            summary += `🧁 *Cupcake Size:* ${data.sizeText}\n`;
         }
 
         if (data.theme) {
-            summary += `🎨 *Theme/Design:* ${data.theme}
-`;
+            summary += `🎨 *Theme/Design:* ${data.theme}\n`;
         }
 
         if (data.type === 'cake') {
             if (data.layers > 1) {
-                summary += `겹 *Layers:* ${data.layers}
-`;
+                summary += `겹 *Layers:* ${data.layers}\n`;
             }
             if (data.naturalColors) {
-                summary += `🌿 *Natural Colors:* Yes
-`;
+                summary += `🌿 *Natural Colors:* Yes\n`;
             }
             if (data.sprinkles) {
-                summary += `✨ *Sprinkles:* Yes
-`;
+                summary += `✨ *Sprinkles:* Yes\n`;
             }
             if (data.piping) {
-                summary += `🍥 *Cream Decoration:* Yes
-`;
+                summary += `🍥 *Cream Decoration:* Yes\n`;
             }
             if (data.letters !== 'no') {
-                summary += `🔤 *Letters on Cake:* ${data.lettersText}
-`;
+                summary += `🔤 *Letters on Cake:* ${data.lettersText}\n`;
                 if (data.cakeName) {
-                    summary += `🏷️ *Name on Cake:* "${data.cakeName}"
-`;
+                    summary += `🏷️ *Name on Cake:* "${data.cakeName}"\n`;
                 }
             }
             if (data.nuts) {
-                summary += `🥜 *Nuts (decoration):* Yes
-`;
+                summary += `🥜 *Nuts (decoration):* Yes\n`;
             }
             if (data.fruits) {
-                summary += `🍓 *Fruits (decoration):* Yes
-`;
+                summary += `🍓 *Fruits (decoration):* Yes\n`;
             }
             if (data.layerFillingTexts.length > 0 && data.layers > 1) {
-                summary += `🍰겹 *Layer Fillings:* ${data.layerFillingTexts.join(', ')}
-`;
+                summary += `🍰겹 *Layer Fillings:* ${data.layerFillingTexts.join(', ')}\n`;
             }
             if (data.topper1) {
-                summary += `🎉 *Topper 1:* Yes`;
-                if (data.topper1Text) {
-                    summary += ` (${data.topper1Text})`;
-                }
-                summary += `
-`;
+                summary += `🎉 *Topper 1:* Yes${data.topper1Text ? ` (${data.topper1Text})` : ''}\n`;
             }
             if (data.topper2) {
-                summary += `🎊 *Topper 2:* Yes`;
-                if (data.topper2Text) {
-                    summary += ` (${data.topper2Text})`;
-                }
-                summary += `
-`;
+                summary += `🎊 *Topper 2:* Yes${data.topper2Text ? ` (${data.topper2Text})` : ''}\n`;
             }
         } else if (data.type === 'cupcake') {
             if (data.creamTopping) {
-                summary += `🍦 *Cream Topping:* Yes
-`;
+                summary += `🍦 *Cream Topping:* Yes\n`;
             }
             if (data.naturalColors) {
-                summary += `🌿 *Natural Colors:* Yes
-`;
+                summary += `🌿 *Natural Colors:* Yes\n`;
             }
         }
 
         // Custom Addition
         if (data.customAddition && data.customAdditionText && data.customAdditionPrice > 0) {
-            summary += `➕ *Custom Addition:* ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})
-`;
+            summary += `➕ *Custom Addition:* ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})\n`;
         }
 
         // Discount
         if (data.discount && data.discountAmount > 0) {
-            summary += `➖ *Discount Applied:* -€${data.discountAmount.toFixed(2)}
-`;
+            summary += `➖ *Discount Applied:* -€${data.discountAmount.toFixed(2)}\n`;
         }
 
         if (data.pickupDate) {
             const dateParts = data.pickupDate.split('-');
             const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
-            summary += `🗓️ *Pickup Date:* ${formattedDate}
-`;
+            summary += `🗓️ *Pickup Date:* ${formattedDate}\n`;
         } else {
-            summary += `🗓️ *Pickup Date:* _Not specified_
-`;
+            summary += `🗓️ *Pickup Date:* _Not specified_\n`;
         }
 
         if (data.alergies) {
-            summary += `⚠️ *Allergies/Special Requests:* ${data.alergies}
-`;
+            summary += `⚠️ *Allergies/Special Requests:* ${data.alergies}\n`;
         }
 
-        summary += `
-💰 *Total Price:* €${data.totalPriceText}
-
-`;
-        summary += `To confirm your order, please complete the payment via this Tikkie link:
-`;
-        summary += `👉 <span class="tikkie-placeholder">[Tikkie link]</span>
-
-`;
-        summary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I'm here for you! 💬
-
-`;
-        summary += `Looking forward to baking something special for you! 🎂🧁
-
-`;
+        summary += `\n💰 *Total Price:* €${data.totalPriceText}\n\n`;
+        summary += `To confirm your order, please complete the payment via this Tikkie link:\n`;
+        summary += `👉 <span class="tikkie-placeholder">[Tikkie link]</span>\n\n`;
+        summary += `Once the payment is done, your order will be officially confirmed. If you have any questions, I'm here for you! 💬\n\n`;
+        summary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
         summary += `Maayan (Manu) 🩷`;
         return summary;
     }
@@ -366,7 +379,7 @@ document.addEventListener('DOMContentLoaded', () => {
         calculatePrice(); // Ensure price is current
         const data = getFormData(); // Get fresh data including updated price
 
-        // Construct the prompt for AI
+        // Construct the prompt for AI using template literals
         let promptString = `You are a helpful assistant specialized in summarizing cake orders for customers.
 
 Based on the following information, generate a concise and friendly summary of the order.
@@ -377,93 +390,68 @@ Type: ${data.type}
 Amount: ${data.amount}
 `;
         if (data.type === 'cake') {
-            promptString += `Cake Style: ${data.cakeStyle}
-`;
+            promptString += `Cake Style: ${data.cakeStyle}\n`;
         }
-        promptString += `Taste: ${data.taste}
-`;
-        promptString += `Size: ${data.size}
-`;
+        promptString += `Taste: ${data.taste}\n`;
+        promptString += `Size: ${data.size}\n`;
 
         if (data.type === 'cupcake' && data.creamTopping) {
-            promptString += `Cream Topping: Yes
-`;
+            promptString += `Cream Topping: Yes\n`;
         }
         if (data.type === 'cake') {
-            promptString += `Layers: ${data.layers}
-`;
+            promptString += `Layers: ${data.layers}\n`;
         }
         if (data.naturalColors) {
-            promptString += `Natural Colors: Yes
-`;
+            promptString += `Natural Colors: Yes\n`;
         }
         if (data.type === 'cake' && data.sprinkles) {
-            promptString += `Sprinkles: Yes
-`;
+            promptString += `Sprinkles: Yes\n`;
         }
         if (data.type === 'cake' && data.piping) {
-            promptString += `Cream Decoration: Yes
-`;
+            promptString += `Cream Decoration: Yes\n`;
         }
         if (data.type === 'cake' && data.letters && data.letters !== 'no') {
-            promptString += `Letters: ${data.letters}
-`;
+            promptString += `Letters: ${data.letters}\n`;
             if (data.cakeName) {
-                promptString += `Cake Name: "${data.cakeName}"
-`;
+                promptString += `Cake Name: "${data.cakeName}"\n`;
             }
         }
         if (data.type === 'cake' && data.nuts) {
-            promptString += `Nuts (decoration): Yes
-`;
+            promptString += `Nuts (decoration): Yes\n`;
         }
         if (data.type === 'cake' && data.fruits) {
-            promptString += `Fruits (decoration): Yes
-`;
+            promptString += `Fruits (decoration): Yes\n`;
         }
         if (data.type === 'cake' && data.layerFillingValues.length > 0 && data.layers > 1) {
-            promptString += `Layer Fillings: ${data.layerFillingValues.join(', ')}
-`;
+            promptString += `Layer Fillings: ${data.layerFillingValues.join(', ')}\n`;
         }
         if (data.type === 'cake' && data.topper1) {
-            promptString += `Topper 1: Yes`;
-            if (data.topper1Text) promptString += ` (${data.topper1Text})`;
-            promptString += `
-`;
+            promptString += `Topper 1: Yes${data.topper1Text ? ` (${data.topper1Text})` : ''}\n`;
         }
         if (data.type === 'cake' && data.topper2) {
-            promptString += `Topper 2: Yes`;
-            if (data.topper2Text) promptString += ` (${data.topper2Text})`;
-            promptString += `
-`;
+            promptString += `Topper 2: Yes${data.topper2Text ? ` (${data.topper2Text})` : ''}\n`;
         }
         if (data.theme) {
-            promptString += `Theme/Design: ${data.theme}
-`;
+            promptString += `Theme/Design: ${data.theme}\n`;
         }
         if (data.pickupDate) {
             const dateParts = data.pickupDate.split('-');
             const formattedDate = `${dateParts[2]}/${dateParts[1]}/${dateParts[0]}`;
-            promptString += `Pickup Date: ${formattedDate}
-`;
+            promptString += `Pickup Date: ${formattedDate}\n`;
         }
         if (data.alergies) {
-            promptString += `Allergies/Special Requests: ${data.alergies}
-`;
+            promptString += `Allergies/Special Requests: ${data.alergies}\n`;
         }
-        promptString += `Total Price: €${data.totalPriceText}
-`;
+        promptString += `Total Price: €${data.totalPriceText}\n`;
 
         // Add custom addition to prompt
         if (data.customAddition && data.customAdditionText && data.customAdditionPrice > 0) {
-            promptString += `Custom Addition: ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})
-`;
+            promptString += `Custom Addition: ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})\n`;
         }
 
         // Add discount to prompt
         if (data.discount && data.discountAmount > 0) {
-            promptString += `Discount Applied: -€${data.discountAmount.toFixed(2)})
-`;
+            promptString += `Discount Applied: -€${data.discountAmount.toFixed(2)})\n`; // Corrected trailing parenthesis
         }
 
         // UI updates for loading state

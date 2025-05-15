@@ -1,333 +1,364 @@
-    * { 
-      box-sizing: border-box; 
-      margin: 0; /* Reset default margins */
-      padding: 0; /* Reset default paddings */
-    }
+:root {
+  --primary-text-color: #7c3a46;
+  --primary-background-color: #fdf7f0;
+  --form-background-color: #fdeaf0;
+  --form-input-background: #ffffff;
+  --form-border-color: #E0D8F0;
+  --form-focus-border-color: #A45069;
+  --form-focus-shadow-color: rgba(164, 80, 105, 0.2);
+  --checkbox-accent-color: #FFBFA0;
+  --checkbox-checkmark-color: #7c3a46;
+  --select-multiple-option-bg: #FFD8B1;
+  --select-multiple-option-text: #8B4050;
+  --total-price-bg: #E9E3F9; /* Consider if this should be different or same as form */
+  --summary-section-bg: #fdeaf0; /* Same as form background */
+  --summary-output-bg: #f4effc;
+  --button-primary-bg: #8B4050;
+  --button-primary-text: white;
+  --button-primary-hover-bg: #A45069;
+  --button-disabled-bg: #c8a7b0;
+  --button-disabled-text: #fdf7f0;
+  --tikkie-link-color: #0056b3;
+  --tikkie-link-hover-color: #004080;
+  --shadow-color-soft: rgba(124, 58, 70, 0.1);
+  --shadow-color-text: rgba(213, 196, 140, 0.2);
 
-    html {
-      font-size: 16px; /* Base font size for rem units */
-    }
+  /* Typography */
+  --font-family-base: 'Arial', sans-serif;
+  --base-font-size: 16px;
+  --line-height-base: 1.6;
 
-    body {
-      font-family: 'Arial', sans-serif; /* Keep it simple and readable */
-      padding: 1rem; /* Responsive padding */
-      background-color: #fdf7f0; /* Slightly softer than #FFF7E0 */
-      max-width: 600px;
-      margin: 1rem auto; /* Add some margin on mobile too */
-      color: #7c3a46; /* Slightly desaturated for softer feel */
-      line-height: 1.6; /* Improve readability */
-    }
+  /* Spacing */
+  --spacing-unit: 1rem;
+  --border-radius-small: 6px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 10px;
+}
 
-    h1 {
-      text-align: center;
-      color: #7c3a46; 
-      font-size: 1.75rem; /* Slightly smaller for mobile */
-      margin: 1.5rem 0 2rem 0; /* Adjust vertical spacing */
-      text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.2); /* Softer shadow */
-    }
+* { 
+  box-sizing: border-box; 
+  margin: 0; /* Reset default margins */
+  padding: 0; /* Reset default paddings */
+}
 
-    form {
-      display: flex;
-      flex-direction: column;
-      gap: 1.25rem; /* Increased gap for better separation */
-      background: #fdeaf0; /* Softer pink */
-      padding: 1.25rem; /* Adjusted padding */
-      border-radius: 10px; /* Slightly smaller radius */
-      box-shadow: 0 2px 8px rgba(124, 58, 70, 0.1); /* Softer shadow */
-    }
+html {
+  font-size: var(--base-font-size); /* Base font size for rem units */
+}
 
-    label {
-      font-weight: 500; /* Slightly lighter weight */
-      color: #7c3a46;
-      display: flex;
-      flex-direction: column;
-      gap: 0.4rem; /* Adjusted gap */
-    }
+body {
+  font-family: var(--font-family-base);
+  padding: var(--spacing-unit); /* Responsive padding */
+  background-color: var(--primary-background-color);
+  max-width: 600px;
+  margin: var(--spacing-unit) auto; /* Add some margin on mobile too */
+  color: var(--primary-text-color);
+  line-height: var(--line-height-base);
+}
 
-    input[type="text"],
-    input[type="number"],
-    input[type="date"],
-    select {
-      width: 100%;
-      padding: 0.9rem 0.75rem; /* Increased padding for touch */
-      border: 1px solid #E0D8F0; /* Softer border */
-      border-radius: 6px; /* Consistent border-radius */
-      font-size: 1rem;
-      background: #ffffff;
-      color: #7c3a46;
-      -webkit-appearance: none; /* Remove default iOS styling */
-      -moz-appearance: none;    /* Remove default Firefox styling */
-      appearance: none;         /* Remove default styling */
-    }
-    
-    select {
-      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237c3a46' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
-      background-repeat: no-repeat;
-      background-position: right 0.75rem center;
-      background-size: 1em;
-    }
+h1 {
+  text-align: center;
+  color: var(--primary-text-color); 
+  font-size: 1.75rem; /* Slightly smaller for mobile */
+  margin: calc(var(--spacing-unit) * 1.5) 0 calc(var(--spacing-unit) * 2) 0; /* Adjust vertical spacing */
+  text-shadow: 1px 1px 2px var(--shadow-color-text);
+}
 
-    input[type="text"]:focus,
-    input[type="number"]:focus,
-    input[type="date"]:focus,
-    select:focus {
-      outline: none;
-      border-color: #A45069; /* Highlight focus */
-      box-shadow: 0 0 0 2px rgba(164, 80, 105, 0.2); /* Softer focus ring */
-    }
+form {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 1.25); /* Increased gap for better separation */
+  background: var(--form-background-color);
+  padding: calc(var(--spacing-unit) * 1.25); /* Adjusted padding */
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 8px var(--shadow-color-soft);
+}
 
-    input[type="checkbox"] {
-      width: 1.5rem; /* Larger for touch */
-      height: 1.5rem; /* Larger for touch */
-      margin: 0;
-      accent-color: #FFBFA0; /* Softer accent */
-      border: 1px solid #E0D8F0;
-      border-radius: 4px;
-      cursor: pointer;
-       -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      position: relative; /* For custom checkmark */
-    }
-    input[type="checkbox"]:checked {
-        background-color: #FFBFA0;
-    }
+/* Style for fieldset and legend */
+fieldset {
+  border: 1px solid var(--form-border-color); /* Softer border for fieldset */
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius-medium);
+  margin-bottom: var(--spacing-unit); /* Add some space between fieldsets */
+}
 
-    input[type="checkbox"]:checked::before {
-      content: '\2714'; /* Checkmark character */
-      display: block;
-      font-size: 1rem;
-      color: #7c3a46;
-      position: absolute;
-      left: 50%;
-      top: 50%;
-      transform: translate(-50%, -50%);
-    }
+legend {
+  font-weight: 600; /* Make legend a bit bolder */
+  color: var(--primary-text-color);
+  padding: 0 calc(var(--spacing-unit) * 0.5); /* Padding around legend text */
+  font-size: 1.1rem;
+}
+/* End of style for fieldset and legend */
 
+label {
+  font-weight: 500; /* Slightly lighter weight */
+  color: var(--primary-text-color);
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-unit) * 0.4); /* Adjusted gap */
+}
 
-    label:has(> input[type="checkbox"]) {
-      flex-direction: row;
-      align-items: center;
-      gap: 0.75rem; /* Adjusted gap */
-      cursor: pointer; /* Make the whole label clickable */
-    }
-    
-    .hidden { display: none !important; } /* Ensure hidden is respected */
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  width: 100%;
+  padding: calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 0.75); /* Increased padding for touch */
+  border: 1px solid var(--form-border-color);
+  border-radius: var(--border-radius-small);
+  font-size: 1rem;
+  background: var(--form-input-background);
+  color: var(--primary-text-color);
+  -webkit-appearance: none; /* Remove default iOS styling */
+  -moz-appearance: none;    /* Remove default Firefox styling */
+  appearance: none;         /* Remove default styling */
+}
 
-    select[multiple] {
-      height: auto;
-      min-height: 10rem; /* Increased min-height */
-      padding: 0.5rem; /* Add some padding */
-      background-image: none; /* Remove arrow for multiple select */
-    }
+select {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%237c3a46' viewBox='0 0 16 16'%3E%3Cpath fill-rule='evenodd' d='M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right calc(var(--spacing-unit) * 0.75) center;
+  background-size: 1em;
+}
 
-    select[multiple] option {
-      padding: 0.75rem; /* Better spacing for options */
-      border-bottom: 1px solid #f0eaf7; /* Softer separator */
-    }
-    select[multiple] option:checked {
-      background-color: #FFD8B1; /* Existing style, keep for now */
-      color: #8B4050; /* Existing style */
-    }
+input[type="text"]:focus,
+input[type="number"]:focus,
+input[type="date"]:focus,
+select:focus {
+  outline: none;
+  border-color: var(--form-focus-border-color);
+  box-shadow: 0 0 0 2px var(--form-focus-shadow-color);
+}
 
-    h2 { /* General h2, like Total Price */
-      text-align: center;
-      color: #7c3a46;
-      margin-top: 2rem;
-      padding: 1rem;
-      background: #E9E3F9; /* Keeping for now */
-      border-radius: 8px;
-      box-shadow: 0 2px 6px rgba(139, 64, 80, 0.08);
-      font-size: 1.25rem; /* Adjusted size */
-    }
+input[type="checkbox"] {
+  width: calc(var(--spacing-unit) * 1.5); /* Larger for touch */
+  height: calc(var(--spacing-unit) * 1.5); /* Larger for touch */
+  margin: 0;
+  accent-color: var(--checkbox-accent-color);
+  border: 1px solid var(--form-border-color);
+  border-radius: 4px;
+  cursor: pointer;
+   -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  position: relative; /* For custom checkmark */
+}
+input[type="checkbox"]:checked {
+    background-color: var(--checkbox-accent-color);
+}
 
-    .summary-order-section {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-      background: #fdeaf0; /* Consistent with form */
-      padding: 1.25rem;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(124, 58, 70, 0.1);
-      margin-top: 2rem;
-    }
-
-    .summary-order-section h2 { /* Order Details h2 */
-      text-align: center;
-      color: #7c3a46;
-      font-size: 1.35rem; /* Slightly more prominent */
-      margin: 0 0 1.5rem 0; /* More space below */
-      text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.15);
-      background: none;
-      box-shadow: none;
-      padding: 0;
-    }
-    
-    input[type="date"]::-webkit-calendar-picker-indicator {
-        opacity: 0.7;
-        cursor: pointer;
-        padding: 0.2rem; /* Add a little padding to make it easier to click */
-    }
-    input[type="date"]:required:invalid::-webkit-datetime-edit {
-        color: #aaa; /* Lighter placeholder text */
-    }
-
-    /* Removed #summariseOrderBtn specific styles as they are handled by .summary-action-btn */
-
-    #orderSummaryOutputContainer {
-        margin-top: 1.5rem;
-        background: #f4effc; /* Softer background */
-        padding: 1rem;
-        border-radius: 8px;
-    }
-
-    #orderSummaryOutput {
-        white-space: pre-wrap;
-        word-wrap: break-word;
-        font-family: 'Arial', sans-serif;
-        color: #7c3a46;
-        font-size: 0.95rem; /* Slightly larger for readability */
-        line-height: 1.6;
-        margin-bottom: 1rem;
-    }
-
-    .topper-text-input {
-      margin-left: 0.5rem;
-      flex-grow: 1;
-      min-width: 100px;
-      width: auto;
-    }
-
-    #summaryActionsContainer {
-      display: flex;
-      gap: 0.75rem;
-      align-items: center;
-      margin-top: 1rem;
-      flex-wrap: wrap; /* Allow buttons to wrap on small screens */
-    }
-
-    #copySummaryBtn,
-    #generateTikkieBtn,
-    #addToCalendarBtn,
-    #addTaskBtn {
-      background-color: #8B4050; /* Keep existing color for now */
-      color: white;
-      padding: 0.6rem 1rem; /* Increased padding */
-      border: none;
-      border-radius: 6px;
-      font-size: 0.9rem; /* Slightly larger */
-      font-weight: 500;
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.1s ease;
-      min-height: 44px; /* Minimum touch target height */
-      display: inline-flex; /* Align icon and text */
-      align-items: center;
-      justify-content: center;
-      flex-grow: 1; /* Allow them to grow */
-    }
-     #copySummaryBtn:active,
-    #generateTikkieBtn:active,
-    #addToCalendarBtn:active,
-    #addTaskBtn:active {
-        transform: translateY(1px); /* Subtle press effect */
-    }
+input[type="checkbox"]:checked::before {
+  content: '\2714'; /* Checkmark character */
+  display: block;
+  font-size: 1rem;
+  color: var(--checkbox-checkmark-color);
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+}
 
 
-    #copySummaryBtn:hover,
-    #generateTikkieBtn:hover,
-    #addToCalendarBtn:hover,
-    #addTaskBtn:hover {
-      background-color: #A45069; /* Keep existing color */
-    }
+label:has(> input[type="checkbox"]) {
+  flex-direction: row;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.75); /* Adjusted gap */
+  cursor: pointer; /* Make the whole label clickable */
+}
 
-    #copySummaryBtn .icon {
-        margin-right: 0.4em; /* Adjust spacing */
-        font-size: 1.1em; /* Make icon slightly larger */
-    }
+.hidden { display: none !important; } /* Ensure hidden is respected */
 
-    #summarizeButtonsContainer {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1.5rem; /* More space above */
-    }
+select[multiple] {
+  height: auto;
+  min-height: calc(var(--spacing-unit) * 10); /* Increased min-height */
+  padding: calc(var(--spacing-unit) * 0.5); /* Add some padding */
+  background-image: none; /* Remove arrow for multiple select */
+}
 
-    .summary-action-btn {
-      background-color: #8B4050; /* Primary action color */
-      color: white;
-      padding: 0.9rem 1.5rem; /* Generous padding */
-      border: none;
-      border-radius: 8px; /* Slightly more rounded */
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.2s ease, transform 0.1s ease;
-      flex: 1; 
-      min-height: 48px; /* Ensure good tap height */
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .summary-action-btn:active {
-        transform: translateY(1px);
-    }
+select[multiple] option {
+  padding: calc(var(--spacing-unit) * 0.75); /* Better spacing for options */
+  border-bottom: 1px solid #f0eaf7; /* Softer separator - consider var if used elsewhere */
+}
+select[multiple] option:checked {
+  background-color: var(--select-multiple-option-bg);
+  color: var(--select-multiple-option-text);
+}
 
-    .summary-action-btn:hover {
-      background-color: #A45069; /* Consistent hover */
-    }
-    .summary-action-btn:disabled {
-      background-color: #c8a7b0; /* Clearer disabled state */
-      color: #fdf7f0;
-      cursor: not-allowed;
-      box-shadow: none;
-    }
+/* Total Price Container - updated to style the new structure */
+.total-price-container {
+  text-align: center;
+  color: var(--primary-text-color);
+  margin-top: calc(var(--spacing-unit) * 2);
+  padding: var(--spacing-unit);
+  background: var(--total-price-bg); 
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 6px rgba(139, 64, 80, 0.08); /* Consider var */
+  font-size: 1.25rem; /* Adjusted size */
+  display: flex; /* For aligning label and output */
+  justify-content: center; /* Center content */
+  align-items: center; /* Vertically align */
+  gap: calc(var(--spacing-unit) * 0.5);
+}
 
-    .tikkie-placeholder {
-        color: #0056b3; /* Darker blue for better contrast */
-        text-decoration: underline;
-        cursor: pointer;
-        font-weight: 500; /* Make it stand out a bit */
-    }
-    .tikkie-placeholder:hover {
-        color: #004080; /* Darker on hover */
-        text-decoration: underline;
-    }
+.total-price-container label {
+  font-weight: 600; /* Make label bold */
+  margin: 0; /* Reset label default margin */
+}
 
-    /* --- CSS for Summarize Buttons --- */
-    #summarizeButtonsContainer {
-      display: flex;
-      gap: 0.75rem;
-      margin-top: 1rem; /* Matches original button margin-top */
-    }
+#totalPriceOutput {
+  font-weight: bold;
+  font-size: 1.1em; /* Make price slightly larger than its label */
+}
+/* End Total Price Container */
 
-    .summary-action-btn {
-      background-color: #8B4050;
-      color: white;
-      padding: 0.8rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 1rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: background-color 0.3s ease;
-      flex: 1; /* Make buttons share the space */
-    }
+.summary-order-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit);
+  background: var(--summary-section-bg);
+  padding: calc(var(--spacing-unit) * 1.25);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 8px var(--shadow-color-soft);
+  margin-top: calc(var(--spacing-unit) * 2);
+}
 
-    .summary-action-btn:hover {
-      background-color: #A45069;
-    }
-    .summary-action-btn:disabled {
-      background-color: #A45069; /* Slightly different shade for disabled */
-      cursor: not-allowed;
-    }
-    /* --- End of CSS for Summarize Buttons --- */
+.summary-order-section h2 { /* Order Details h2 */
+  text-align: center;
+  color: var(--primary-text-color);
+  font-size: 1.35rem; /* Slightly more prominent */
+  margin: 0 0 calc(var(--spacing-unit) * 1.5) 0; /* More space below */
+  text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.15); /* Consider var */
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
 
-    /* --- ADDED CSS for Tikkie placeholder --- */
-    .tikkie-placeholder {
-        color: #0066cc; /* A distinct link-like color */
-        text-decoration: underline;
-        cursor: pointer;
-    }
-    .tikkie-placeholder:hover {
-        color: #004C99; /* Darker on hover */
-    }
-    /* --- END OF ADDED CSS --- */ 
+input[type="date"]::-webkit-calendar-picker-indicator {
+    opacity: 0.7;
+    cursor: pointer;
+    padding: calc(var(--spacing-unit) * 0.2); /* Add a little padding to make it easier to click */
+}
+input[type="date"]:required:invalid::-webkit-datetime-edit {
+    color: #aaa; /* Lighter placeholder text - consider var */
+}
+
+#orderSummaryOutputContainer {
+    margin-top: calc(var(--spacing-unit) * 1.5);
+    background: var(--summary-output-bg);
+    padding: var(--spacing-unit);
+    border-radius: var(--border-radius-medium);
+}
+
+#orderSummaryOutput {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-family: var(--font-family-base);
+    color: var(--primary-text-color);
+    font-size: 0.95rem; /* Slightly larger for readability */
+    line-height: var(--line-height-base);
+    margin-bottom: var(--spacing-unit);
+}
+
+.topper-text-input {
+  margin-left: calc(var(--spacing-unit) * 0.5);
+  flex-grow: 1;
+  min-width: 100px;
+  width: auto;
+}
+
+#summaryActionsContainer {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 0.75);
+  align-items: center;
+  margin-top: var(--spacing-unit);
+  flex-wrap: wrap; /* Allow buttons to wrap on small screens */
+}
+
+#copySummaryBtn,
+#generateTikkieBtn,
+#addToCalendarBtn,
+#addTaskBtn {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  padding: calc(var(--spacing-unit) * 0.6) var(--spacing-unit); /* Increased padding */
+  border: none;
+  border-radius: var(--border-radius-small);
+  font-size: 0.9rem; /* Slightly larger */
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  min-height: 44px; /* Minimum touch target height */
+  display: inline-flex; /* Align icon and text */
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1; /* Allow them to grow */
+}
+ #copySummaryBtn:active,
+#generateTikkieBtn:active,
+#addToCalendarBtn:active,
+#addTaskBtn:active {
+    transform: translateY(1px); /* Subtle press effect */
+}
+
+
+#copySummaryBtn:hover,
+#generateTikkieBtn:hover,
+#addToCalendarBtn:hover,
+#addTaskBtn:hover {
+  background-color: var(--button-primary-hover-bg);
+}
+
+#copySummaryBtn .icon {
+    margin-right: 0.4em; /* Adjust spacing */
+    font-size: 1.1em; /* Make icon slightly larger */
+}
+
+#summarizeButtonsContainer {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 0.75);
+  margin-top: var(--spacing-unit);
+}
+
+.summary-action-btn {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.5);
+  border: none;
+  border-radius: var(--border-radius-medium);
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  flex: 1; 
+  min-height: 48px; 
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.summary-action-btn:active {
+    transform: translateY(1px);
+}
+
+.summary-action-btn:hover {
+  background-color: var(--button-primary-hover-bg);
+}
+.summary-action-btn:disabled {
+  background-color: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* --- End of CSS for Summarize Buttons --- */ /* This comment seems redundant given the block structure */
+
+/* --- ADDED CSS for Tikkie placeholder --- */ /* This comment also seems redundant */
+.tikkie-placeholder {
+    color: var(--tikkie-link-color);
+    text-decoration: underline;
+    cursor: pointer;
+    font-weight: 500;
+}
+.tikkie-placeholder:hover {
+    color: var(--tikkie-link-hover-color);
+    text-decoration: underline;
+}
+/* --- END OF ADDED CSS --- */ /* This comment also seems redundant */ 

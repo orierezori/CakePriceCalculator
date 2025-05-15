@@ -9,115 +9,133 @@
 <body>
   <h1>Cake Price Calculator</h1>
   <form id="cakeForm">
-    <label>Type
-      <select id="type">
-        <option value="cake">Cake</option>
-        <option value="cupcake">Cupcake</option>
-      </select>
-    </label>
-    <label>Amount
-      <input type="number" id="amount" min="1" max="500" value="1">
-    </label>
-    <label id="cakeStyleLabel">Cake Style
-      <select id="cakeStyle">
-        <option value="classic">Classic</option>
-        <option value="custom">Custom Made</option>
-      </select>
-    </label>
-    <label>Taste of Cake
-      <select id="taste">
-        <option value="vanilla">Vanilla</option>
-        <option value="chocolate">Chocolate</option>
-        <option value="carrot">Carrot</option>
-        <option value="orange">Orange</option>
-      </select>
-    </label>
-    <label>Size
-      <select id="size">
-        <option value="18">18''</option>
-        <option value="20">20''</option>
-        <option value="mini">Mini</option>
-        <option value="regular">Regular</option>
-      </select>
-    </label>
-    <label id="creamToppingLabel">Cream Topping
-      <input type="checkbox" id="creamTopping">
-    </label>
-    <label id="layersLabel">Layers
-      <select id="layers">
-        <option value="1">1</option>
-        <option value="2">2</option>
-        <option value="3">3</option>
-        <option value="4">4</option>
-        <option value="5">5</option>
-        <option value="6">6</option>
-      </select>
-    </label>
-    <label>Natural Colors
-      <input type="checkbox" id="naturalColors">
-    </label>
-    <label id="sprinklesLabel">Sprinkles
-      <input type="checkbox" id="sprinkles">
-    </label>
-    <label id="pipingLabel">Cream Decoration
-      <input type="checkbox" id="piping">
-    </label>
-    <label id="lettersLabel">Letters on Cake
-      <select id="letters">
-        <option value="no">No</option>
-        <option value="small">Small</option>
-        <option value="big">Big</option>
-      </select>
-    </label>
-    <label id="nameLabel">Name on Cake
-      <input type="text" id="cakeName">
-    </label>
-    <label id="nutsLabel">Nuts
-      <input type="checkbox" id="nuts">
-    </label>
-    <label id="fruitsLabel">Fruits
-      <input type="checkbox" id="fruits">
-    </label>
-    <label id="layerFillingLabel">Layer Filling
-      <select id="layerFilling" size="5" multiple>
-        <option value="nuts">Nuts</option>
-        <option value="fruits">Fruits</option>
-        <option value="oreo">Oreo</option>
-        <option value="lotus">Lotus</option>
-        <option value="jam">Jam</option>
-      </select>
-    </label>
-    <label id="toppers1Label">Toppers 1
-      <input type="checkbox" id="topper1">
-      <input type="text" id="topper1Text" placeholder="Optional details" class="topper-text-input hidden">
-    </label>
-    <label id="toppers2Label">Toppers 2
-      <input type="checkbox" id="topper2">
-      <input type="text" id="topper2Text" placeholder="Optional details" class="topper-text-input hidden">
-    </label>
-    <label id="customAdditionLabel">Custom Addition
-      <input type="checkbox" id="customAddition">
-      <input type="text" id="customAdditionText" placeholder="Description" class="topper-text-input hidden">
-      <input type="number" id="customAdditionPrice" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01">
-    </label>
-    <label id="discountLabel">Discount
-      <input type="checkbox" id="discount">
-      <input type="number" id="discountAmount" placeholder="Amount" class="topper-text-input hidden" min="0" step="0.01">
-    </label>
+    <fieldset>
+      <legend>Basic Options</legend>
+      <label>Type
+        <select id="type">
+          <option value="cake">Cake</option>
+          <option value="cupcake">Cupcake</option>
+        </select>
+      </label>
+      <label>Amount
+        <input type="number" id="amount" min="1" max="500" value="1">
+      </label>
+      <label id="cakeStyleLabel">Cake Style
+        <select id="cakeStyle">
+          <option value="classic">Classic</option>
+          <option value="custom">Custom Made</option>
+        </select>
+      </label>
+      <label>Taste of Cake
+        <select id="taste">
+          <option value="vanilla">Vanilla</option>
+          <option value="chocolate">Chocolate</option>
+          <option value="carrot">Carrot</option>
+          <option value="orange">Orange</option>
+        </select>
+      </label>
+      <label>Size
+        <select id="size">
+          <option value="18">18''</option>
+          <option value="20">20''</option>
+          <option value="mini">Mini</option>
+          <option value="regular">Regular</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset id="cakeDecorationsFieldset">
+      <legend>Cake Decorations & Layers</legend>
+      <label id="creamToppingLabel">Cream Topping
+        <input type="checkbox" id="creamTopping">
+      </label>
+      <label id="layersLabel">Layers
+        <select id="layers">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
+          <option value="6">6</option>
+        </select>
+      </label>
+      <label>Natural Colors
+        <input type="checkbox" id="naturalColors">
+      </label>
+      <label id="sprinklesLabel">Sprinkles
+        <input type="checkbox" id="sprinkles">
+      </label>
+      <label id="pipingLabel">Cream Decoration
+        <input type="checkbox" id="piping">
+      </label>
+      <label id="lettersLabel">Letters on Cake
+        <select id="letters">
+          <option value="no">No</option>
+          <option value="small">Small</option>
+          <option value="big">Big</option>
+        </select>
+      </label>
+      <label id="nameLabel">Name on Cake
+        <input type="text" id="cakeName">
+      </label>
+      <label id="nutsLabel">Nuts (decoration)
+        <input type="checkbox" id="nuts">
+      </label>
+      <label id="fruitsLabel">Fruits (decoration)
+        <input type="checkbox" id="fruits">
+      </label>
+      <label id="layerFillingLabel">Layer Filling
+        <select id="layerFilling" size="5" multiple>
+          <option value="nuts">Nuts</option>
+          <option value="fruits">Fruits</option>
+          <option value="oreo">Oreo</option>
+          <option value="lotus">Lotus</option>
+          <option value="jam">Jam</option>
+        </select>
+      </label>
+    </fieldset>
+
+    <fieldset id="extrasFieldset">
+      <legend>Extras & Customizations</legend>
+      <label id="toppers1Label">Toppers 1
+        <input type="checkbox" id="topper1">
+        <input type="text" id="topper1Text" placeholder="Optional details" class="topper-text-input hidden">
+      </label>
+      <label id="toppers2Label">Toppers 2
+        <input type="checkbox" id="topper2">
+        <input type="text" id="topper2Text" placeholder="Optional details" class="topper-text-input hidden">
+      </label>
+      <label id="customAdditionLabel">Custom Addition
+        <input type="checkbox" id="customAddition">
+        <input type="text" id="customAdditionText" placeholder="Description" class="topper-text-input hidden">
+        <input type="number" id="customAdditionPrice" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01">
+      </label>
+      <label id="discountLabel">Discount
+        <input type="checkbox" id="discount">
+        <input type="number" id="discountAmount" placeholder="Amount" class="topper-text-input hidden" min="0" step="0.01">
+      </label>
+    </fieldset>
+    
+    <div class="total-price-container">
+      <label for="totalPriceOutput">Total Price:</label>
+      <output name="totalPrice" id="totalPriceOutput" for="cakeForm">€0.00</output>
+    </div>
   </form>
-  <h2>Total Price: €<span id="totalPrice">0.00</span></h2>
 
   <div class="summary-order-section">
     <h2>Order Details</h2>
-    <label>Theme
-      <input type="text" id="theme" name="theme" placeholder="e.g., Unicorn, Floral, Spiderman">
-    </label>
-    <label>Pickup Date
-      <input type="date" id="pickupDate" name="pickupDate">
-    </label>
-    <label>Allergies / Special Requests
-      <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
-    </label>
+    <fieldset>
+      <legend>Customer & Pickup Information</legend>
+      <label>Theme
+        <input type="text" id="theme" name="theme" placeholder="e.g., Unicorn, Floral, Spiderman">
+      </label>
+      <label>Pickup Date
+        <input type="date" id="pickupDate" name="pickupDate">
+      </label>
+      <label>Allergies / Special Requests
+        <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
+      </label>
+    </fieldset>
     <div id="summarizeButtonsContainer">
         <button type="button" id="summariseOrderBtn" class="summary-action-btn">Summarise Order</button>
         <button type="button" id="summariseOrderAIBtn" class="summary-action-btn">Summarise Order AI</button>
