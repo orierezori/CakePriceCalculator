@@ -17,6 +17,15 @@ fieldset {
   margin-bottom: var(--spacing-unit);
 }
 
+/* Ensure consistent spacing within fieldsets */
+fieldset label {
+  margin-bottom: calc(var(--spacing-unit) * 0.5);
+}
+
+fieldset label:last-child {
+  margin-bottom: 0;
+}
+
 legend {
   font-weight: 600;
   color: var(--primary-text-color);
@@ -119,6 +128,19 @@ select[multiple] {
   /* Better mobile scrolling within select */
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  /* Visual indicator for multi-select */
+  border: 2px dashed var(--form-border-color);
+  background-color: var(--form-input-background);
+}
+
+/* Multi-select hint styling */
+.multi-select-hint {
+  font-size: 0.8rem;
+  color: var(--primary-text-color);
+  opacity: 0.7;
+  font-style: italic;
+  margin-bottom: calc(var(--spacing-unit) * 0.25);
+  display: block;
 }
 
 select[multiple] option {
@@ -137,11 +159,40 @@ select[multiple] option:checked {
 
 /* ===== SPECIALIZED INPUT STYLES ===== */
 
+/* ===== COMPLEX LABEL LAYOUTS ===== */
+
+/* Labels with checkbox + additional inputs (like Custom Addition) */
+label:has(> input[type="checkbox"]):has(> input[type="text"]),
+label:has(> input[type="checkbox"]):has(> input[type="number"]) {
+  flex-wrap: wrap;
+  align-items: center;
+  min-height: auto;
+}
+
+/* Checkbox within complex labels */
+label:has(> input[type="checkbox"]) > input[type="checkbox"] {
+  flex-shrink: 0;
+  margin-top: 2px; /* Slight adjustment for visual alignment */
+}
+
+/* Text inputs within labels that have checkboxes */
 .topper-text-input {
   margin-left: calc(var(--spacing-unit) * 0.5);
   flex-grow: 1;
-  min-width: 100px;
+  min-width: 150px;
   width: auto;
+  margin-top: calc(var(--spacing-unit) * 0.25);
+}
+
+/* Ensure proper spacing for stacked elements in complex labels */
+label:has(> .topper-text-input) {
+  align-items: flex-start;
+}
+
+/* Fix alignment for labels with just text (like "Natural Colors") */
+label:has(> input[type="checkbox"]):not(:has(> input[type="text"])):not(:has(> input[type="number"])):not(:has(> select)) {
+  align-items: center;
+  min-height: calc(var(--spacing-unit) * 2);
 }
 
 input[type="date"]::-webkit-calendar-picker-indicator {

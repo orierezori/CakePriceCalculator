@@ -59,11 +59,36 @@
     margin-bottom: calc(var(--spacing-unit) * 0.25);
   }
   
+  /* Improve checkbox alignment on mobile */
+  label:has(> input[type="checkbox"]) {
+    gap: calc(var(--spacing-unit) * 0.6);
+    align-items: center;
+  }
+  
+  /* Better spacing for complex labels on mobile */
+  .topper-text-input {
+    margin-left: calc(var(--spacing-unit) * 0.25);
+    margin-top: calc(var(--spacing-unit) * 0.5);
+    min-width: 120px;
+  }
+  
   /* Improve multi-select visibility */
   select[multiple] {
     min-height: calc(var(--spacing-unit) * 16);
     font-size: 1.1rem;
   }
+  
+  /* Mobile-specific multi-select hint */
+  .multi-select-hint {
+    font-size: 0.85rem;
+  }
+  
+  /* Show touch-friendly instructions on mobile */
+  .multi-select-hint::after {
+    content: " • Tap multiple options to select";
+    font-weight: 500;
+  }
+}
 }
 
 /* Landscape phones */

@@ -17,6 +17,13 @@
   <form id="cakeForm">
     <fieldset>
       <legend>Basic Options</legend>
+      <label>Tiers
+        <select id="tiers">
+          <option value="1">1</option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+        </select>
+      </label>
       <label>Type
         <select id="type">
           <option value="cake">Cake</option>
@@ -32,6 +39,10 @@
           <option value="custom">Custom Made</option>
         </select>
       </label>
+    </fieldset>
+
+    <fieldset id="cakeDecorationsFieldset">
+      <legend>Cake Setup</legend>
       <label>Taste of Cake
         <select id="taste">
           <option value="vanilla">Vanilla</option>
@@ -52,10 +63,6 @@
           <option value="regular">Regular</option>
         </select>
       </label>
-    </fieldset>
-
-    <fieldset id="cakeDecorationsFieldset">
-      <legend>Cake Decorations & Layers</legend>
       <label id="creamToppingLabel">Cream Topping
         <input type="checkbox" id="creamTopping">
       </label>
@@ -70,6 +77,7 @@
         </select>
       </label>
       <label id="layerFillingLabel">Layer Filling
+        <small class="multi-select-hint">Hold Ctrl/Cmd to select multiple options</small>
         <select id="layerFilling" size="7" multiple>
           <option value="nuts">Nuts</option>
           <option value="fruits">Fruits</option>

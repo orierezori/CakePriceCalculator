@@ -212,6 +212,7 @@ class FormHandler {
   cacheElements() {
     return {
       FORM: document.getElementById('cakeForm'),
+      TIERS: document.getElementById('tiers'),
       TYPE: document.getElementById('type'),
       AMOUNT: document.getElementById('amount'),
       CAKE_STYLE: document.getElementById('cakeStyle'),
@@ -267,6 +268,8 @@ class FormHandler {
     
     return {
       // Basic options
+      tiers: parseInt(elements.TIERS?.value) || 1,
+      tiersText: this.getSelectedOptionText(elements.TIERS),
       type: elements.TYPE?.value || 'cake',
       typeText: this.getSelectedOptionText(elements.TYPE),
       amount: parseInt(elements.AMOUNT?.value) || 1,
@@ -366,6 +369,7 @@ class FormHandler {
       this.resetExtrasFields();
       
       // Set type back to selected one
+      if (elements.TIERS) elements.TIERS.value = 1;
       if (elements.TYPE) elements.TYPE.value = currentType;
       if (elements.AMOUNT) elements.AMOUNT.value = 1;
 
@@ -642,6 +646,7 @@ class SummaryGenerator {
   static generateStandardSummary(data) {
     let summary = `Thanks so much for your interest in our custom ${data.type === 'cake' ? '🎂 cake' : '🧁 cupcake'}! Based on your preferences, here's your order summary:\n\n`;
     summary += `📝 *Order Summary:*\n\n`;
+    summary += `🏗️ *Tiers:* ${data.tiersText}\n`;
     summary += `✨ *Type:* ${data.typeText}\n`;
     summary += `🔢 *Amount:* ${data.amount}\n`;
     
@@ -786,9 +791,10 @@ class SummaryGenerator {
     let promptString = `You are a helpful assistant specialized in summarizing cake orders for customers.
 
 Based on the following information, generate a concise and friendly summary of the order.
-Include all relevant details about the cake, such as type, amount, flavor, size, and decorations.
+Include all relevant details about the cake, such as tiers, type, amount, flavor, size, and decorations.
 Also, include the pickup date, any allergies or special requests, and the total price.
 
+Tiers: ${data.tiers}
 Type: ${data.type}
 Amount: ${data.amount}
 `;
@@ -1068,7 +1074,7 @@ class CakePriceCalculatorApp {
     const calendarStartDate = baseDate + 'T' + startTime;
     const calendarEndDate = baseDate + 'T' + endTime;
 
-    let eventDetails = `Order Summary:\nType: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
+    let eventDetails = `Order Summary:\nTiers: ${data.tiersText}\nType: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
     
     if (data.type === 'cake') {
       eventDetails += `Style: ${data.cakeStyleText}\nSize: ${data.sizeText}\nLayers: ${data.layers}\n`;
@@ -1092,7 +1098,7 @@ class CakePriceCalculatorApp {
 
     const taskTitle = `Cake Order: ${data.theme || (data.typeText + (data.type === 'cake' ? ' Cake' : ' Cupcakes'))}`;
     
-    let taskDetails = `Type: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
+    let taskDetails = `Tiers: ${data.tiersText}\nType: ${data.typeText}\nAmount: ${data.amount}\nFlavor: ${data.tasteText}\n`;
     
     if (data.type === 'cake') {
       taskDetails += `Style: ${data.cakeStyleText}\nSize: ${data.sizeText}\nLayers: ${data.layers}\n`;
