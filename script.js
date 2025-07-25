@@ -16,7 +16,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const cakeNameEl = document.getElementById('cakeName');
     const nutsEl = document.getElementById('nuts');
     const fruitsEl = document.getElementById('fruits');
+    const coconutVanillaCreamEl = document.getElementById('coconutVanillaCream');
     const layerFillingEl = document.getElementById('layerFilling');
+    const letters2El = document.getElementById('letters2');
+    const cakeName2El = document.getElementById('cakeName2');
     const topper1El = document.getElementById('topper1');
     const topper1TextEl = document.getElementById('topper1Text');
     const topper2El = document.getElementById('topper2');
@@ -26,6 +29,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const customAdditionEl = document.getElementById('customAddition');
     const customAdditionTextEl = document.getElementById('customAdditionText');
     const customAdditionPriceEl = document.getElementById('customAdditionPrice');
+    const customAddition2El = document.getElementById('customAddition2');
+    const customAddition2TextEl = document.getElementById('customAddition2Text');
+    const customAddition2PriceEl = document.getElementById('customAddition2Price');
     const discountEl = document.getElementById('discount');
     const discountAmountEl = document.getElementById('discountAmount');
 
@@ -67,8 +73,12 @@ document.addEventListener('DOMContentLoaded', () => {
             letters: lettersEl.value,
             lettersText: getSelectedOptionText(lettersEl),
             cakeName: cakeNameEl.value.trim(),
+            letters2: letters2El.value,
+            letters2Text: getSelectedOptionText(letters2El),
+            cakeName2: cakeName2El.value.trim(),
             nuts: nutsEl.checked,
             fruits: fruitsEl.checked,
+            coconutVanillaCream: coconutVanillaCreamEl.checked,
             layerFillingValues: [...layerFillingEl.options].filter(o => o.selected).map(o => o.value),
             layerFillingTexts: [...layerFillingEl.options].filter(o => o.selected).map(o => o.text),
             topper1: topper1El.checked,
@@ -78,6 +88,9 @@ document.addEventListener('DOMContentLoaded', () => {
             customAddition: customAdditionEl.checked,
             customAdditionText: customAdditionTextEl.value.trim(),
             customAdditionPrice: parseFloat(customAdditionPriceEl.value) || 0,
+            customAddition2: customAddition2El.checked,
+            customAddition2Text: customAddition2TextEl.value.trim(),
+            customAddition2Price: parseFloat(customAddition2PriceEl.value) || 0,
             discount: discountEl.checked,
             discountAmount: parseFloat(discountAmountEl.value) || 0,
             theme: themeEl.value.trim(),
@@ -92,8 +105,11 @@ document.addEventListener('DOMContentLoaded', () => {
         let price = 0;
 
         // Pricing constants
+        const CAKE_BASE_PRICE_16 = 30;
         const CAKE_BASE_PRICE_18 = 30;
         const CAKE_BASE_PRICE_20 = 35;
+        const CAKE_BASE_PRICE_22 = 40;
+        const CAKE_BASE_PRICE_24 = 45;
         const CAKE_LAYER_INCREMENT = 10;
         const CAKE_NATURAL_COLORS_PRICE = 2;
         const CAKE_SPRINKLES_PRICE = 3;
@@ -103,8 +119,10 @@ document.addEventListener('DOMContentLoaded', () => {
         const CAKE_LETTERS_BIG_PRICE_PER_CHAR = 0.5;
         const CAKE_NUTS_PRICE = 5;
         const CAKE_FRUITS_PRICE = 5;
-        const CAKE_FILLING_JAM_PRICE = 1;
-        const CAKE_FILLING_OTHER_PRICE = 1.5;
+        const CAKE_COCONUT_VANILLA_CREAM_PRICE = 7;
+        const CAKE_FILLING_NUTS_FRUITS_OREO_LOTUS_PRICE = 1.5;
+        const CAKE_FILLING_LEMON_ORANGE_RASPBERRY_STRAWBERRY_PRICE = 2;
+        const CAKE_FILLING_FRESH_STRAWBERRY_PRICE = 3;
         const CAKE_TOPPER_PRICE = 10;
 
         const CUPCAKE_MINI_PRICE = 2;
@@ -115,16 +133,33 @@ document.addEventListener('DOMContentLoaded', () => {
         const CUPCAKE_NATURAL_COLORS_ADDITIONAL_PRICE_PER_20 = 2; // for > 30
 
         if (data.type === 'cake') {
-            price += data.size === '18' ? CAKE_BASE_PRICE_18 : CAKE_BASE_PRICE_20;
+            // Base price by size
+            switch(data.size) {
+                case '16': price += CAKE_BASE_PRICE_16; break;
+                case '18': price += CAKE_BASE_PRICE_18; break;
+                case '20': price += CAKE_BASE_PRICE_20; break;
+                case '22': price += CAKE_BASE_PRICE_22; break;
+                case '24': price += CAKE_BASE_PRICE_24; break;
+            }
             price += (data.layers - 1) * CAKE_LAYER_INCREMENT;
             if (data.naturalColors) price += CAKE_NATURAL_COLORS_PRICE;
             if (data.sprinkles) price += CAKE_SPRINKLES_PRICE;
             if (data.piping) price += data.cakeStyle === 'classic' ? CAKE_PIPING_CLASSIC_PRICE : CAKE_PIPING_CUSTOM_PRICE;
             if (data.letters !== 'no') price += (data.letters === 'small' ? CAKE_LETTERS_SMALL_PRICE_PER_CHAR : CAKE_LETTERS_BIG_PRICE_PER_CHAR) * data.cakeName.length;
+            if (data.letters2 !== 'no') price += (data.letters2 === 'small' ? CAKE_LETTERS_SMALL_PRICE_PER_CHAR : CAKE_LETTERS_BIG_PRICE_PER_CHAR) * data.cakeName2.length;
             if (data.nuts) price += CAKE_NUTS_PRICE;
             if (data.fruits) price += CAKE_FRUITS_PRICE;
+            if (data.coconutVanillaCream) price += CAKE_COCONUT_VANILLA_CREAM_PRICE;
             if (data.layers > 1 && data.layerFillingValues.length > 0) {
-                const totalFilling = data.layerFillingValues.reduce((sum, fill) => sum + (fill === 'jam' ? CAKE_FILLING_JAM_PRICE : CAKE_FILLING_OTHER_PRICE), 0);
+                const totalFilling = data.layerFillingValues.reduce((sum, fill) => {
+                    if (['lemon', 'orangemango', 'raspberry', 'strawberry'].includes(fill)) {
+                        return sum + CAKE_FILLING_LEMON_ORANGE_RASPBERRY_STRAWBERRY_PRICE;
+                    } else if (fill === 'freshstrawberry') {
+                        return sum + CAKE_FILLING_FRESH_STRAWBERRY_PRICE;
+                    } else {
+                        return sum + CAKE_FILLING_NUTS_FRUITS_OREO_LOTUS_PRICE;
+                    }
+                }, 0);
                 price += (data.layers - 1) * totalFilling;
             }
             if (data.topper1) price += CAKE_TOPPER_PRICE;
@@ -142,6 +177,9 @@ document.addEventListener('DOMContentLoaded', () => {
         // Apply custom addition price
         if (data.customAddition && data.customAdditionPrice > 0) {
             price += data.customAdditionPrice;
+        }
+        if (data.customAddition2 && data.customAddition2Price > 0) {
+            price += data.customAddition2Price;
         }
 
         // Apply discount
@@ -177,6 +215,12 @@ document.addEventListener('DOMContentLoaded', () => {
             customAdditionEl.checked = false;
             customAdditionTextEl.value = '';
             customAdditionPriceEl.value = '';
+            customAddition2El.checked = false;
+            customAddition2TextEl.value = '';
+            customAddition2PriceEl.value = '';
+            coconutVanillaCreamEl.checked = false;
+            letters2El.value = 'no';
+            cakeName2El.value = '';
             discountEl.checked = false;
             discountAmountEl.value = '';
             
@@ -192,7 +236,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateTypeSpecificVisibility(currentType) {
-        const cakeOnlyIds = ["cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", "toppers1Label", "toppers2Label"];
+        const cakeOnlyIds = ["cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", "lettersLabel", "nameLabel", "letters2Label", "name2Label", "nutsLabel", "fruitsLabel", "coconutVanillaCreamLabel", "toppers1Label", "toppers2Label"];
         const cupcakeOnlyIds = ["creamToppingLabel"];
 
         cakeOnlyIds.forEach(id => document.getElementById(id).classList.toggle('hidden', currentType !== 'cake'));
@@ -200,11 +244,12 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function updateTasteAndSizeOptions(currentType) {
+        // All tastes are now available for cakes
         Array.from(tasteEl.options).forEach(opt => {
-            opt.disabled = (currentType === 'cake' && (opt.value === 'carrot' || opt.value === 'orange'));
+            opt.disabled = false;
         });
 
-        const validSizes = currentType === 'cake' ? ['18', '20'] : ['mini', 'regular'];
+        const validSizes = currentType === 'cake' ? ['16', '18', '20', '22', '24'] : ['mini', 'regular'];
         Array.from(sizeEl.options).forEach(opt => {
             const isValid = validSizes.includes(opt.value);
             opt.hidden = !isValid;
@@ -229,6 +274,13 @@ document.addEventListener('DOMContentLoaded', () => {
         const hideName = !isCakeType || lettersValue === 'no';
         nameLabel.classList.toggle('hidden', hideName);
         if (hideName) cakeNameEl.value = '';
+        
+        // Name 2 Label visibility
+        const letters2Value = letters2El.value;
+        const name2Label = document.getElementById('name2Label');
+        const hideName2 = !isCakeType || letters2Value === 'no';
+        name2Label.classList.toggle('hidden', hideName2);
+        if (hideName2) cakeName2El.value = '';
 
         // Topper text fields
         topper1TextEl.classList.toggle('hidden', !topper1El.checked || !isCakeType);
@@ -242,6 +294,14 @@ document.addEventListener('DOMContentLoaded', () => {
         if (!customAdditionEl.checked) {
             customAdditionTextEl.value = '';
             customAdditionPriceEl.value = '';
+        }
+        
+        // Custom Addition 2 text and price fields
+        customAddition2TextEl.classList.toggle('hidden', !customAddition2El.checked);
+        customAddition2PriceEl.classList.toggle('hidden', !customAddition2El.checked);
+        if (!customAddition2El.checked) {
+            customAddition2TextEl.value = '';
+            customAddition2PriceEl.value = '';
         }
 
         // Discount amount field
@@ -307,9 +367,15 @@ document.addEventListener('DOMContentLoaded', () => {
                 summary += `🍥 *Cream Decoration:* Yes\n`;
             }
             if (data.letters !== 'no') {
-                summary += `🔤 *Letters on Cake:* ${data.lettersText}\n`;
+                summary += `🔤 *Letters on Cake 1:* ${data.lettersText}\n`;
                 if (data.cakeName) {
-                    summary += `🏷️ *Name on Cake:* "${data.cakeName}"\n`;
+                    summary += `🏷️ *Name on Cake 1:* "${data.cakeName}"\n`;
+                }
+            }
+            if (data.letters2 !== 'no') {
+                summary += `🔤 *Letters on Cake 2:* ${data.letters2Text}\n`;
+                if (data.cakeName2) {
+                    summary += `🏷️ *Name on Cake 2:* "${data.cakeName2}"\n`;
                 }
             }
             if (data.nuts) {
@@ -317,6 +383,9 @@ document.addEventListener('DOMContentLoaded', () => {
             }
             if (data.fruits) {
                 summary += `🍓 *Fruits (decoration):* Yes\n`;
+            }
+            if (data.coconutVanillaCream) {
+                summary += `🥥 *Coconut Vanilla Cream:* Yes\n`;
             }
             if (data.layerFillingTexts.length > 0 && data.layers > 1) {
                 summary += `🍰겹 *Layer Fillings:* ${data.layerFillingTexts.join(', ')}\n`;
@@ -338,7 +407,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
         // Custom Addition
         if (data.customAddition && data.customAdditionText && data.customAdditionPrice > 0) {
-            summary += `➕ *Custom Addition:* ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})\n`;
+            summary += `➕ *Custom Addition 1:* ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})\n`;
+        }
+        if (data.customAddition2 && data.customAddition2Text && data.customAddition2Price > 0) {
+            summary += `➕ *Custom Addition 2:* ${data.customAddition2Text} (€${data.customAddition2Price.toFixed(2)})\n`;
         }
 
         // Discount
@@ -411,9 +483,15 @@ Amount: ${data.amount}
             promptString += `Cream Decoration: Yes\n`;
         }
         if (data.type === 'cake' && data.letters && data.letters !== 'no') {
-            promptString += `Letters: ${data.letters}\n`;
+            promptString += `Letters on Cake 1: ${data.letters}\n`;
             if (data.cakeName) {
-                promptString += `Cake Name: "${data.cakeName}"\n`;
+                promptString += `Name on Cake 1: "${data.cakeName}"\n`;
+            }
+        }
+        if (data.type === 'cake' && data.letters2 && data.letters2 !== 'no') {
+            promptString += `Letters on Cake 2: ${data.letters2}\n`;
+            if (data.cakeName2) {
+                promptString += `Name on Cake 2: "${data.cakeName2}"\n`;
             }
         }
         if (data.type === 'cake' && data.nuts) {
@@ -421,6 +499,9 @@ Amount: ${data.amount}
         }
         if (data.type === 'cake' && data.fruits) {
             promptString += `Fruits (decoration): Yes\n`;
+        }
+        if (data.type === 'cake' && data.coconutVanillaCream) {
+            promptString += `Coconut Vanilla Cream: Yes\n`;
         }
         if (data.type === 'cake' && data.layerFillingValues.length > 0 && data.layers > 1) {
             promptString += `Layer Fillings: ${data.layerFillingValues.join(', ')}\n`;
@@ -446,7 +527,10 @@ Amount: ${data.amount}
 
         // Add custom addition to prompt
         if (data.customAddition && data.customAdditionText && data.customAdditionPrice > 0) {
-            promptString += `Custom Addition: ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})\n`;
+            promptString += `Custom Addition 1: ${data.customAdditionText} (€${data.customAdditionPrice.toFixed(2)})\n`;
+        }
+        if (data.customAddition2 && data.customAddition2Text && data.customAddition2Price > 0) {
+            promptString += `Custom Addition 2: ${data.customAddition2Text} (€${data.customAddition2Price.toFixed(2)})\n`;
         }
 
         // Add discount to prompt
@@ -552,7 +636,8 @@ To confirm your order, please complete the payment via the Tikkie link below.
             eventDetails += `Cupcake Size: ${data.sizeText}\n`;
         }
         if (data.theme) eventDetails += `Theme: ${data.theme}\n`;
-        if (data.cakeName) eventDetails += `Name on Cake: ${data.cakeName}\n`;
+        if (data.cakeName) eventDetails += `Name on Cake 1: ${data.cakeName}\n`;
+        if (data.cakeName2) eventDetails += `Name on Cake 2: ${data.cakeName2}\n`;
         if (data.alergies) eventDetails += `Allergies/Requests: ${data.alergies}\n`;
         eventDetails += `Total Price: €${data.totalPriceText}`;
 
@@ -573,7 +658,8 @@ To confirm your order, please complete the payment via the Tikkie link below.
             taskDetails += `Cupcake Size: ${data.sizeText}\n`;
         }
         if (data.theme) taskDetails += `Theme: ${data.theme}\n`;
-        if (data.cakeName) taskDetails += `Name on Cake: ${data.cakeName}\n`;
+        if (data.cakeName) taskDetails += `Name on Cake 1: ${data.cakeName}\n`;
+        if (data.cakeName2) taskDetails += `Name on Cake 2: ${data.cakeName2}\n`;
         if (data.alergies) taskDetails += `Allergies/Requests: ${data.alergies}\n`;
         if (data.pickupDate) {
             const dateParts = data.pickupDate.split('-');
