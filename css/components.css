@@ -204,3 +204,112 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 input[type="date"]:required:invalid::-webkit-datetime-edit {
   color: #aaa;
 }
+
+/* ===== TIER SECTION COLOR VARIATIONS ===== */
+
+/* Tier 1 - Blue */
+.tier-setup-section.tier-1 {
+  background: linear-gradient(135deg, #e3f2fd 0%, #f1f8ff 100%);
+  border: 2px solid #1976d2;
+  border-radius: var(--border-radius-medium);
+}
+
+.tier-setup-section.tier-1 legend {
+  background: #1976d2;
+  color: white;
+  padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+  border-radius: var(--border-radius-small);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(25, 118, 210, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Tier 2 - Green */
+.tier-setup-section.tier-2 {
+  background: linear-gradient(135deg, #e8f5e8 0%, #f1f8f1 100%);
+  border: 2px solid #388e3c;
+  border-radius: var(--border-radius-medium);
+}
+
+.tier-setup-section.tier-2 legend {
+  background: #388e3c;
+  color: white;
+  padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+  border-radius: var(--border-radius-small);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(56, 142, 60, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Tier 3 - Orange */
+.tier-setup-section.tier-3 {
+  background: linear-gradient(135deg, #fff3e0 0%, #fef7f0 100%);
+  border: 2px solid #f57c00;
+  border-radius: var(--border-radius-medium);
+}
+
+.tier-setup-section.tier-3 legend {
+  background: #f57c00;
+  color: white;
+  padding: calc(var(--spacing-unit) * 0.5) calc(var(--spacing-unit) * 1);
+  border-radius: var(--border-radius-small);
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(245, 124, 0, 0.3);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Enhanced tier section styling */
+.tier-setup-section {
+  margin-bottom: calc(var(--spacing-unit) * 1.5);
+  box-shadow: 0 2px 8px var(--shadow-color-soft);
+  transition: all 0.2s ease;
+  position: relative;
+}
+
+.tier-setup-section:hover {
+  box-shadow: 0 4px 12px rgba(124, 58, 70, 0.15);
+  transform: translateY(-1px);
+}
+
+/* Improve tier section focus states for accessibility */
+.tier-setup-section:focus-within {
+  box-shadow: 0 4px 12px rgba(124, 58, 70, 0.2);
+  transform: translateY(-1px);
+}
+
+/* Add subtle tier number indicator */
+.tier-setup-section::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  left: -1px;
+  right: -1px;
+  height: 4px;
+  border-radius: var(--border-radius-medium) var(--border-radius-medium) 0 0;
+  opacity: 0.8;
+}
+
+.tier-setup-section.tier-1::before {
+  background: #1976d2;
+}
+
+.tier-setup-section.tier-2::before {
+  background: #388e3c;
+}
+
+.tier-setup-section.tier-3::before {
+  background: #f57c00;
+}
+
+/* Improve label visibility inside tier sections */
+.tier-setup-section label {
+  color: #333333;
+  font-weight: 600;
+}
+
+/* Ensure tier section labels have better contrast than inherited styles */
+.tier-setup-section label,
+.tier-setup-section .multi-select-hint {
+  color: #333333 !important;
+  font-weight: 600 !important;
+}

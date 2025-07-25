@@ -622,7 +622,7 @@ class UIController {
 
     for (let i = 1; i <= tierCount; i++) {
       const fieldset = document.createElement('fieldset');
-      fieldset.className = 'tier-setup-section';
+      fieldset.className = `tier-setup-section tier-${i}`;
       fieldset.id = `tierSetup${i}`;
       
       fieldset.innerHTML = `
