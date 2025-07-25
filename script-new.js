@@ -26,6 +26,9 @@ const CONFIG = {
       NUTS: 5,
       FRUITS: 5,
       COCONUT_VANILLA_CREAM: 7,
+      DRIPPING: 5,
+      FLOWERS_DECORATION: 12,
+      CAKE_COATING_CREAM: 10,
       TOPPER: 10
     },
     
@@ -182,6 +185,9 @@ class PriceCalculator {
     if (data.nuts) price += CONFIG.PRICING.CAKE.NUTS;
     if (data.fruits) price += CONFIG.PRICING.CAKE.FRUITS;
     if (data.coconutVanillaCream) price += CONFIG.PRICING.CAKE.COCONUT_VANILLA_CREAM;
+    if (data.dripping) price += CONFIG.PRICING.CAKE.DRIPPING;
+    if (data.flowersDecoration) price += CONFIG.PRICING.CAKE.FLOWERS_DECORATION;
+    if (data.cakeCoatingCream) price += CONFIG.PRICING.CAKE.CAKE_COATING_CREAM;
 
     // Letters pricing
     price += this.calculateLettersPrice(data.letters, data.cakeName);
@@ -411,6 +417,9 @@ class FormHandler {
       NUTS: document.getElementById('nuts'),
       FRUITS: document.getElementById('fruits'),
       COCONUT_VANILLA_CREAM: document.getElementById('coconutVanillaCream'),
+      DRIPPING: document.getElementById('dripping'),
+      FLOWERS_DECORATION: document.getElementById('flowersDecoration'),
+      CAKE_COATING_CREAM: document.getElementById('cakeCoatingCream'),
       LAYER_FILLING: document.getElementById('layerFilling'),
       TOPPER1: document.getElementById('topper1'),
       TOPPER1_TEXT: document.getElementById('topper1Text'),
@@ -468,6 +477,9 @@ class FormHandler {
       nuts: elements.NUTS?.checked || false,
       fruits: elements.FRUITS?.checked || false,
       coconutVanillaCream: elements.COCONUT_VANILLA_CREAM?.checked || false,
+      dripping: elements.DRIPPING?.checked || false,
+      flowersDecoration: elements.FLOWERS_DECORATION?.checked || false,
+      cakeCoatingCream: elements.CAKE_COATING_CREAM?.checked || false,
       
       // Letters and names
       letters: elements.LETTERS?.value || 'no',
@@ -787,7 +799,8 @@ class UIController {
     const cakeOnlyIds = [
       "cakeStyleLabel", "layersLabel", "sprinklesLabel", "pipingLabel", 
       "lettersLabel", "nameLabel", "nutsLabel", "fruitsLabel", 
-      "coconutVanillaCreamLabel", "toppers1Label"
+      "coconutVanillaCreamLabel", "drippingLabel", "flowersDecorationLabel", 
+      "cakeCoatingCreamLabel", "toppers1Label"
     ];
     const cupcakeOnlyIds = ["creamToppingLabel"];
 
@@ -1137,6 +1150,15 @@ class SummaryGenerator {
     if (data.coconutVanillaCream) {
       summary += `🥥 *Coconut Vanilla Cream:* Yes\n`;
     }
+    if (data.dripping) {
+      summary += `💧 *Dripping:* Yes\n`;
+    }
+    if (data.flowersDecoration) {
+      summary += `🌸 *Flowers Decoration:* Yes\n`;
+    }
+    if (data.cakeCoatingCream) {
+      summary += `🧈 *Cake-coating Cream:* Yes\n`;
+    }
     if (data.topper1) {
       summary += `🎉 *Topper 1:* Yes${data.topper1Text ? ` (${data.topper1Text})` : ''}\n`;
     }
@@ -1276,6 +1298,9 @@ Amount: ${data.amount}
       if (data.nuts) promptString += `Nuts (decoration): Yes\n`;
       if (data.fruits) promptString += `Fruits (decoration): Yes\n`;
       if (data.coconutVanillaCream) promptString += `Coconut Vanilla Cream: Yes\n`;
+      if (data.dripping) promptString += `Dripping: Yes\n`;
+      if (data.flowersDecoration) promptString += `Flowers Decoration: Yes\n`;
+      if (data.cakeCoatingCream) promptString += `Cake-coating Cream: Yes\n`;
       if (data.layerFillingValues.length > 0 && data.layers > 1) {
         promptString += `Layer Fillings: ${data.layerFillingValues.join(', ')}\n`;
       }
