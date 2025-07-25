@@ -1,0 +1,76 @@
+/* ===== CSS VARIABLES & BASE STYLES ===== */
+
+:root {
+  /* Colors */
+  --primary-text-color: #7c3a46;
+  --primary-background-color: #fdf7f0;
+  --form-background-color: #fdeaf0;
+  --form-input-background: #ffffff;
+  --form-border-color: #E0D8F0;
+  --form-focus-border-color: #A45069;
+  --form-focus-shadow-color: rgba(164, 80, 105, 0.2);
+  --checkbox-accent-color: #FFBFA0;
+  --checkbox-checkmark-color: #7c3a46;
+  --select-multiple-option-bg: #FFD8B1;
+  --select-multiple-option-text: #8B4050;
+  --total-price-bg: #E9E3F9;
+  --summary-section-bg: #fdeaf0;
+  --summary-output-bg: #f4effc;
+  --button-primary-bg: #8B4050;
+  --button-primary-text: white;
+  --button-primary-hover-bg: #A45069;
+  --button-disabled-bg: #c8a7b0;
+  --button-disabled-text: #fdf7f0;
+  --tikkie-link-color: #0056b3;
+  --tikkie-link-hover-color: #004080;
+  --shadow-color-soft: rgba(124, 58, 70, 0.1);
+  --shadow-color-text: rgba(213, 196, 140, 0.2);
+
+  /* Typography */
+  --font-family-base: 'Arial', sans-serif;
+  --base-font-size: 16px;
+  --line-height-base: 1.6;
+
+  /* Spacing */
+  --spacing-unit: 1rem;
+  --border-radius-small: 6px;
+  --border-radius-medium: 8px;
+  --border-radius-large: 10px;
+}
+
+/* ===== RESET & BASE STYLES ===== */
+
+* { 
+  box-sizing: border-box; 
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: var(--base-font-size);
+}
+
+body {
+  font-family: var(--font-family-base);
+  padding: var(--spacing-unit);
+  background-color: var(--primary-background-color);
+  max-width: 600px;
+  margin: var(--spacing-unit) auto;
+  color: var(--primary-text-color);
+  line-height: var(--line-height-base);
+  /* Better mobile scrolling */
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+h1 {
+  text-align: center;
+  color: var(--primary-text-color); 
+  font-size: 1.75rem;
+  margin: calc(var(--spacing-unit) * 1.5) 0 calc(var(--spacing-unit) * 2) 0;
+  text-shadow: 1px 1px 2px var(--shadow-color-text);
+}
+
+.hidden { 
+  display: none !important; 
+}

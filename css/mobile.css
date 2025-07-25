@@ -1,0 +1,108 @@
+/* ===== MOBILE RESPONSIVE STYLES ===== */
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 375px) {
+  body {
+    padding: calc(var(--spacing-unit) * 0.75);
+    margin: calc(var(--spacing-unit) * 0.5) auto;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    margin: var(--spacing-unit) 0 calc(var(--spacing-unit) * 1.5) 0;
+  }
+  
+  form {
+    padding: var(--spacing-unit);
+    gap: var(--spacing-unit);
+  }
+  
+  fieldset {
+    padding: calc(var(--spacing-unit) * 0.75);
+  }
+  
+  .summary-order-section {
+    padding: var(--spacing-unit);
+  }
+}
+
+/* Small screens optimization */
+@media (max-width: 480px) {
+  /* Improve button layouts on small screens */
+  #summaryActionsContainer {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.5);
+  }
+  
+  #copySummaryBtn,
+  #generateTikkieBtn,
+  #addToCalendarBtn,
+  #addTaskBtn {
+    flex-grow: 0;
+    width: 100%;
+    min-height: 50px;
+  }
+  
+  #summarizeButtonsContainer {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.5);
+  }
+  
+  .summary-action-btn {
+    width: 100%;
+    min-height: 54px;
+  }
+  
+  /* Better label spacing on small screens */
+  label {
+    gap: calc(var(--spacing-unit) * 0.5);
+    margin-bottom: calc(var(--spacing-unit) * 0.25);
+  }
+  
+  /* Improve multi-select visibility */
+  select[multiple] {
+    min-height: calc(var(--spacing-unit) * 16);
+    font-size: 1.1rem;
+  }
+}
+
+/* Landscape phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  h1 {
+    font-size: 1.4rem;
+    margin: calc(var(--spacing-unit) * 0.5) 0 var(--spacing-unit) 0;
+  }
+  
+  form {
+    gap: calc(var(--spacing-unit) * 0.75);
+  }
+  
+  .summary-order-section {
+    margin-top: var(--spacing-unit);
+  }
+}
+
+/* Enhanced focus states for mobile */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch devices */
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  select:focus {
+    transform: scale(1.02);
+    transition: transform 0.15s ease;
+  }
+  
+  button:active,
+  .summary-action-btn:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Improve accessibility for larger text preferences */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}

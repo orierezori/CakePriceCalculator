@@ -1,0 +1,99 @@
+/* ===== BUTTON STYLES ===== */
+
+/* ===== PRIMARY ACTION BUTTONS ===== */
+
+.summary-action-btn {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
+  border: none;
+  border-radius: var(--border-radius-medium);
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.1s ease;
+  flex: 1;
+  min-height: 52px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  /* Better mobile interaction */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+.summary-action-btn:hover {
+  background-color: var(--button-primary-hover-bg);
+}
+
+.summary-action-btn:active {
+  transform: translateY(1px);
+}
+
+.summary-action-btn:disabled {
+  background-color: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
+  cursor: not-allowed;
+  box-shadow: none;
+}
+
+/* ===== SECONDARY ACTION BUTTONS ===== */
+
+#copySummaryBtn,
+#generateTikkieBtn,
+#addToCalendarBtn,
+#addTaskBtn {
+  background-color: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.125);
+  border: none;
+  border-radius: var(--border-radius-small);
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease, transform 0.1s ease;
+  min-height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  /* Better mobile interaction */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+#copySummaryBtn:hover,
+#generateTikkieBtn:hover,
+#addToCalendarBtn:hover,
+#addTaskBtn:hover {
+  background-color: var(--button-primary-hover-bg);
+}
+
+#copySummaryBtn:active,
+#generateTikkieBtn:active,
+#addToCalendarBtn:active,
+#addTaskBtn:active {
+  transform: translateY(1px);
+}
+
+/* ===== BUTTON ICONS ===== */
+
+#summaryActionsContainer button .icon,
+#summarizeButtonsContainer .summary-action-btn .icon {
+  margin-right: 0.4em;
+  font-size: 1.1em;
+}
+
+/* ===== SPECIAL LINK STYLES ===== */
+
+.tikkie-placeholder {
+  color: var(--tikkie-link-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.tikkie-placeholder:hover {
+  color: var(--tikkie-link-hover-color);
+  text-decoration: underline;
+}

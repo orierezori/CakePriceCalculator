@@ -1,0 +1,85 @@
+/* ===== LAYOUT COMPONENTS ===== */
+
+/* ===== TOTAL PRICE CONTAINER ===== */
+
+.total-price-container {
+  text-align: center;
+  color: var(--primary-text-color);
+  margin-top: calc(var(--spacing-unit) * 2);
+  padding: var(--spacing-unit);
+  background: var(--total-price-bg); 
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 6px rgba(139, 64, 80, 0.08);
+  font-size: 1.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: calc(var(--spacing-unit) * 0.5);
+}
+
+.total-price-container label {
+  font-weight: 600;
+  margin: 0;
+}
+
+#totalPriceOutput {
+  font-weight: bold;
+  font-size: 1.1em;
+}
+
+/* ===== SUMMARY SECTION ===== */
+
+.summary-order-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-unit);
+  background: var(--summary-section-bg);
+  padding: calc(var(--spacing-unit) * 1.25);
+  border-radius: var(--border-radius-large);
+  box-shadow: 0 2px 8px var(--shadow-color-soft);
+  margin-top: calc(var(--spacing-unit) * 2);
+}
+
+.summary-order-section h2 {
+  text-align: center;
+  color: var(--primary-text-color);
+  font-size: 1.35rem;
+  margin: 0 0 calc(var(--spacing-unit) * 1.5) 0;
+  text-shadow: 1px 1px 2px rgba(213, 196, 140, 0.15);
+  background: none;
+  box-shadow: none;
+  padding: 0;
+}
+
+#orderSummaryOutputContainer {
+  margin-top: calc(var(--spacing-unit) * 1.5);
+  background: var(--summary-output-bg);
+  padding: var(--spacing-unit);
+  border-radius: var(--border-radius-medium);
+}
+
+#orderSummaryOutput {
+  white-space: pre-wrap;
+  word-wrap: break-word;
+  font-family: var(--font-family-base);
+  color: var(--primary-text-color);
+  font-size: 0.95rem;
+  line-height: var(--line-height-base);
+  margin-bottom: var(--spacing-unit);
+}
+
+/* ===== BUTTON CONTAINERS ===== */
+
+#summarizeButtonsContainer {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 0.75);
+  margin-top: var(--spacing-unit);
+}
+
+#summaryActionsContainer {
+  display: flex;
+  gap: calc(var(--spacing-unit) * 0.75);
+  align-items: center;
+  margin-top: var(--spacing-unit);
+  flex-wrap: wrap;
+}

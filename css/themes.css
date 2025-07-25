@@ -1,0 +1,42 @@
+/* ===== THEME VARIATIONS ===== */
+
+/* Dark mode support (if user prefers dark) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-text-color: #e8d5db;
+    --primary-background-color: #2d1b20;
+    --form-background-color: #3d2329;
+    --form-input-background: #4a2f35;
+    --form-border-color: #5c3940;
+    --total-price-bg: #3d2329;
+    --summary-section-bg: #3d2329;
+    --summary-output-bg: #2a1a1f;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    border-width: 2px;
+  }
+  
+  button,
+  .summary-action-btn {
+    border: 2px solid var(--primary-text-color);
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

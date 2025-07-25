@@ -47,12 +47,15 @@ html {
 
 body {
   font-family: var(--font-family-base);
-  padding: var(--spacing-unit); /* Responsive padding */
+  padding: var(--spacing-unit);
   background-color: var(--primary-background-color);
   max-width: 600px;
-  margin: var(--spacing-unit) auto; /* Add some margin on mobile too */
+  margin: var(--spacing-unit) auto;
   color: var(--primary-text-color);
   line-height: var(--line-height-base);
+  /* Better mobile scrolling */
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
 }
 
 h1 {
@@ -102,15 +105,19 @@ input[type="number"],
 input[type="date"],
 select {
   width: 100%;
-  padding: calc(var(--spacing-unit) * 0.9) calc(var(--spacing-unit) * 0.75); /* Increased padding for touch */
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 0.875); /* Enhanced touch padding */
   border: 1px solid var(--form-border-color);
   border-radius: var(--border-radius-small);
-  font-size: 1rem;
+  font-size: 1.1rem; /* Larger font for better mobile readability */
   background: var(--form-input-background);
   color: var(--primary-text-color);
-  -webkit-appearance: none; /* Remove default iOS styling */
-  -moz-appearance: none;    /* Remove default Firefox styling */
-  appearance: none;         /* Remove default styling */
+  min-height: 48px; /* Ensure minimum touch target */
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+  /* Better mobile interaction */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 
 select {
@@ -169,14 +176,21 @@ label:has(> input[type="checkbox"]) {
 
 select[multiple] {
   height: auto;
-  min-height: calc(var(--spacing-unit) * 10); /* Increased min-height */
-  padding: calc(var(--spacing-unit) * 0.5); /* Add some padding */
-  background-image: none; /* Remove arrow for multiple select */
+  min-height: calc(var(--spacing-unit) * 14); /* Increased for better mobile interaction */
+  padding: calc(var(--spacing-unit) * 0.75);
+  background-image: none;
+  /* Better mobile scrolling within select */
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 select[multiple] option {
-  padding: calc(var(--spacing-unit) * 0.75); /* Better spacing for options */
-  border-bottom: 1px solid #f0eaf7; /* Softer separator - consider var if used elsewhere */
+  padding: calc(var(--spacing-unit) * 1); /* Larger touch targets */
+  border-bottom: 1px solid #f0eaf7;
+  font-size: 1.05rem; /* Slightly larger text */
+  min-height: 44px; /* Ensure touch-friendly option height */
+  display: flex;
+  align-items: center;
 }
 select[multiple] option:checked {
   background-color: var(--select-multiple-option-bg);
@@ -286,18 +300,21 @@ input[type="date"]:required:invalid::-webkit-datetime-edit {
 #addTaskBtn {
   background-color: var(--button-primary-bg);
   color: var(--button-primary-text);
-  padding: calc(var(--spacing-unit) * 0.6) var(--spacing-unit); /* Increased padding */
+  padding: calc(var(--spacing-unit) * 0.75) calc(var(--spacing-unit) * 1.125);
   border: none;
   border-radius: var(--border-radius-small);
-  font-size: 0.9rem; /* Slightly larger */
+  font-size: 1rem; /* Improved readability */
   font-weight: 500;
   cursor: pointer;
   transition: background-color 0.2s ease, transform 0.1s ease;
-  min-height: 44px; /* Minimum touch target height */
-  display: inline-flex; /* Align icon and text */
+  min-height: 48px; /* Larger touch target */
+  display: inline-flex;
   align-items: center;
   justify-content: center;
-  flex-grow: 1; /* Allow them to grow */
+  flex-grow: 1;
+  /* Better mobile interaction */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
  #copySummaryBtn:active,
 #generateTikkieBtn:active,
@@ -323,18 +340,21 @@ input[type="date"]:required:invalid::-webkit-datetime-edit {
 .summary-action-btn {
   background-color: var(--button-primary-bg);
   color: var(--button-primary-text);
-  padding: calc(var(--spacing-unit) * 0.8) calc(var(--spacing-unit) * 1.5);
+  padding: calc(var(--spacing-unit) * 1) calc(var(--spacing-unit) * 1.5);
   border: none;
   border-radius: var(--border-radius-medium);
-  font-size: 1rem;
+  font-size: 1.1rem; /* Larger font for better mobile readability */
   font-weight: 600;
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.1s ease;
-  flex: 1; 
-  min-height: 48px; 
+  flex: 1;
+  min-height: 52px; /* Larger touch target */
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  /* Better mobile interaction */
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
 }
 .summary-action-btn:active {
     transform: translateY(1px);
@@ -363,4 +383,144 @@ input[type="date"]:required:invalid::-webkit-datetime-edit {
     color: var(--tikkie-link-hover-color);
     text-decoration: underline;
 }
-/* --- END OF ADDED CSS --- */ /* This comment also seems redundant */ 
+/* --- END OF ADDED CSS --- */
+
+/* ===== MOBILE IMPROVEMENTS ===== */
+
+/* Extra small screens (phones in portrait) */
+@media (max-width: 375px) {
+  body {
+    padding: calc(var(--spacing-unit) * 0.75);
+    margin: calc(var(--spacing-unit) * 0.5) auto;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+    margin: var(--spacing-unit) 0 calc(var(--spacing-unit) * 1.5) 0;
+  }
+  
+  form {
+    padding: var(--spacing-unit);
+    gap: var(--spacing-unit);
+  }
+  
+  fieldset {
+    padding: calc(var(--spacing-unit) * 0.75);
+  }
+  
+  .summary-order-section {
+    padding: var(--spacing-unit);
+  }
+}
+
+/* Small screens optimization */
+@media (max-width: 480px) {
+  /* Improve button layouts on small screens */
+  #summaryActionsContainer {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.5);
+  }
+  
+  #copySummaryBtn,
+  #generateTikkieBtn,
+  #addToCalendarBtn,
+  #addTaskBtn {
+    flex-grow: 0;
+    width: 100%;
+    min-height: 50px;
+  }
+  
+  #summarizeButtonsContainer {
+    flex-direction: column;
+    gap: calc(var(--spacing-unit) * 0.5);
+  }
+  
+  .summary-action-btn {
+    width: 100%;
+    min-height: 54px;
+  }
+  
+  /* Better label spacing on small screens */
+  label {
+    gap: calc(var(--spacing-unit) * 0.5);
+    margin-bottom: calc(var(--spacing-unit) * 0.25);
+  }
+  
+  /* Improve multi-select visibility */
+  select[multiple] {
+    min-height: calc(var(--spacing-unit) * 16);
+    font-size: 1.1rem;
+  }
+}
+
+/* Landscape phones */
+@media (max-height: 500px) and (orientation: landscape) {
+  h1 {
+    font-size: 1.4rem;
+    margin: calc(var(--spacing-unit) * 0.5) 0 var(--spacing-unit) 0;
+  }
+  
+  form {
+    gap: calc(var(--spacing-unit) * 0.75);
+  }
+  
+  .summary-order-section {
+    margin-top: var(--spacing-unit);
+  }
+}
+
+/* Enhanced focus states for mobile */
+@media (hover: none) and (pointer: coarse) {
+  /* Touch devices */
+  input[type="text"]:focus,
+  input[type="number"]:focus,
+  input[type="date"]:focus,
+  select:focus {
+    transform: scale(1.02);
+    transition: transform 0.15s ease;
+  }
+  
+  button:active,
+  .summary-action-btn:active {
+    transform: scale(0.98);
+    transition: transform 0.1s ease;
+  }
+}
+
+/* Improve accessibility for larger text preferences */
+@media (prefers-reduced-motion: no-preference) {
+  * {
+    scroll-behavior: smooth;
+  }
+}
+
+/* Dark mode support (if user prefers dark) */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-text-color: #e8d5db;
+    --primary-background-color: #2d1b20;
+    --form-background-color: #3d2329;
+    --form-input-background: #4a2f35;
+    --form-border-color: #5c3940;
+    --total-price-bg: #3d2329;
+    --summary-section-bg: #3d2329;
+    --summary-output-bg: #2a1a1f;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  input[type="text"],
+  input[type="number"],
+  input[type="date"],
+  select {
+    border-width: 2px;
+  }
+  
+  button,
+  .summary-action-btn {
+    border: 2px solid var(--primary-text-color);
+  }
+}
+
+/* ===== END MOBILE IMPROVEMENTS =====*/ 
