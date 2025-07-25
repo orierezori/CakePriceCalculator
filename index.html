@@ -17,13 +17,6 @@
   <form id="cakeForm">
     <fieldset>
       <legend>Basic Options</legend>
-      <label>Tiers
-        <select id="tiers">
-          <option value="1">1</option>
-          <option value="2">2</option>
-          <option value="3">3</option>
-        </select>
-      </label>
       <label>Type
         <select id="type">
           <option value="cake">Cake</option>
@@ -39,58 +32,18 @@
           <option value="custom">Custom Made</option>
         </select>
       </label>
-    </fieldset>
-
-    <fieldset id="cakeDecorationsFieldset">
-      <legend>Cake Setup</legend>
-      <label>Taste of Cake
-        <select id="taste">
-          <option value="vanilla">Vanilla</option>
-          <option value="chocolate">Chocolate</option>
-          <option value="carrot">Carrot</option>
-          <option value="orange">Orange</option>
-          <option value="apple">Apple</option>
-        </select>
-      </label>
-      <label>Size
-        <select id="size">
-          <option value="16">16''</option>
-          <option value="18">18''</option>
-          <option value="20">20''</option>
-          <option value="22">22''</option>
-          <option value="24">24''</option>
-          <option value="mini">Mini</option>
-          <option value="regular">Regular</option>
-        </select>
-      </label>
-      <label id="creamToppingLabel">Cream Topping
-        <input type="checkbox" id="creamTopping">
-      </label>
-      <label id="layersLabel">Layers
-        <select id="layers">
+      <label>Tiers
+        <select id="tiers">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option value="6">6</option>
-        </select>
-      </label>
-      <label id="layerFillingLabel">Layer Filling
-        <small class="multi-select-hint">Hold Ctrl/Cmd to select multiple options</small>
-        <select id="layerFilling" size="7" multiple>
-          <option value="nuts">Nuts</option>
-          <option value="fruits">Fruits</option>
-          <option value="oreo">Oreo</option>
-          <option value="lotus">Lotus</option>
-          <option value="lemon">Lemon</option>
-          <option value="orangemango">Orange Mango</option>
-          <option value="raspberry">Raspberry</option>
-          <option value="strawberry">Strawberry</option>
-          <option value="freshstrawberry">Fresh Strawberry</option>
         </select>
       </label>
     </fieldset>
+
+    <!-- Dynamic Tier Setup Sections will be inserted here -->
+    <div id="tierSectionsContainer"></div>
+
 
     <fieldset id="extrasFieldset">
       <legend>Extras & Customizations</legend>

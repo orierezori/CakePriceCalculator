@@ -71,11 +71,27 @@ class PriceCalculator {
   static calculateTotalPrice(formData) {
     let price = 0;
 
-    if (formData.type === 'cake') {
-      price += this.calculateCakePrice(formData);
-    } else if (formData.type === 'cupcake') {
-      price += this.calculateCupcakePrice(formData);
+    // Calculate tier-based pricing
+    if (formData.tierData && formData.tierData.length > 0) {
+      // Calculate price for each tier
+      formData.tierData.forEach(tierData => {
+        if (formData.type === 'cake') {
+          price += this.calculateTierCakePrice(tierData, formData);
+        } else if (formData.type === 'cupcake') {
+          price += this.calculateTierCupcakePrice(tierData, formData);
+        }
+      });
+    } else {
+      // Fallback for legacy single-tier calculation
+      if (formData.type === 'cake') {
+        price += this.calculateCakePrice(formData);
+      } else if (formData.type === 'cupcake') {
+        price += this.calculateCupcakePrice(formData);
+      }
     }
+
+    // Apply global extras (decorations, toppers, custom additions)
+    price += this.calculateGlobalExtras(formData);
 
     // Apply custom additions
     price += this.calculateCustomAdditions(formData);
@@ -83,8 +99,104 @@ class PriceCalculator {
     // Apply discount
     price -= this.calculateDiscount(formData);
 
+    // Multiply by amount for cakes (cupcakes already have amount built into tier calculations)
+    if (formData.type === 'cake') {
+      price *= formData.amount;
+    }
+
     // Ensure price doesn't go below zero
     return Math.max(0, price);
+  }
+
+  /**
+   * Calculate price for a single tier of cake
+   * @param {Object} tierData - Single tier data
+   * @param {Object} globalData - Global form data
+   * @returns {number} - Tier cake price
+   */
+  static calculateTierCakePrice(tierData, globalData) {
+    let price = 0;
+
+    // Base price by size
+    price += CONFIG.PRICING.CAKE_BASE_PRICES[tierData.size] || CONFIG.PRICING.CAKE_BASE_PRICES['18'];
+
+    // Layer pricing
+    price += (tierData.layers - 1) * CONFIG.PRICING.CAKE.LAYER_INCREMENT;
+
+    // Layer fillings for this tier
+    if (tierData.layers > 1 && tierData.layerFillingValues?.length > 0) {
+      const totalFillingPrice = tierData.layerFillingValues.reduce((sum, filling) => {
+        if (CONFIG.VALIDATION.EXPENSIVE_FILLINGS.includes(filling)) {
+          return sum + CONFIG.PRICING.FILLING.LEMON_ORANGE_RASPBERRY_STRAWBERRY;
+        } else if (CONFIG.VALIDATION.PREMIUM_FILLINGS.includes(filling)) {
+          return sum + CONFIG.PRICING.FILLING.FRESH_STRAWBERRY;
+        } else {
+          return sum + CONFIG.PRICING.FILLING.NUTS_FRUITS_OREO_LOTUS;
+        }
+      }, 0);
+      price += (tierData.layers - 1) * totalFillingPrice;
+    }
+
+    return price;
+  }
+
+  /**
+   * Calculate price for a single tier of cupcakes
+   * @param {Object} tierData - Single tier data
+   * @param {Object} globalData - Global form data
+   * @returns {number} - Tier cupcake price
+   */
+  static calculateTierCupcakePrice(tierData, globalData) {
+    let price = 0;
+
+    // Base price
+    const unitPrice = tierData.size === 'mini' 
+      ? CONFIG.PRICING.CUPCAKE.MINI 
+      : CONFIG.PRICING.CUPCAKE.REGULAR;
+    price += unitPrice * globalData.amount;
+
+    // Cream topping for this tier
+    if (tierData.creamTopping) {
+      price += CONFIG.PRICING.CUPCAKE.CREAM_TOPPING_PER_UNIT * globalData.amount;
+    }
+
+    return price;
+  }
+
+  /**
+   * Calculate global extras that apply to the entire order
+   * @param {Object} data - Global form data
+   * @returns {number} - Global extras price
+   */
+  static calculateGlobalExtras(data) {
+    let price = 0;
+
+    // Global decorations (apply once per order)
+    if (data.naturalColors) price += CONFIG.PRICING.CAKE.NATURAL_COLORS;
+    if (data.sprinkles) price += CONFIG.PRICING.CAKE.SPRINKLES;
+    if (data.piping) {
+      price += data.cakeStyle === 'classic' 
+        ? CONFIG.PRICING.CAKE.PIPING_CLASSIC 
+        : CONFIG.PRICING.CAKE.PIPING_CUSTOM;
+    }
+    if (data.nuts) price += CONFIG.PRICING.CAKE.NUTS;
+    if (data.fruits) price += CONFIG.PRICING.CAKE.FRUITS;
+    if (data.coconutVanillaCream) price += CONFIG.PRICING.CAKE.COCONUT_VANILLA_CREAM;
+
+    // Letters pricing
+    price += this.calculateLettersPrice(data.letters, data.cakeName);
+    price += this.calculateLettersPrice(data.letters2, data.cakeName2);
+
+    // Toppers
+    if (data.topper1) price += CONFIG.PRICING.CAKE.TOPPER;
+    if (data.topper2) price += CONFIG.PRICING.CAKE.TOPPER;
+
+    // Cupcake natural colors (applies to entire order)
+    if (data.type === 'cupcake' && data.naturalColors) {
+      price += this.calculateCupcakeNaturalColorsPrice(data.amount);
+    }
+
+    return price;
   }
 
   static calculateCakePrice(data) {
@@ -207,6 +319,75 @@ class PriceCalculator {
 class FormHandler {
   constructor() {
     this.elements = this.cacheElements();
+    this.tierElements = {};
+  }
+
+  /**
+   * Cache tier-specific elements dynamically
+   * @param {number} tierCount - Number of tiers
+   */
+  cacheTierElements(tierCount) {
+    this.tierElements = {};
+    
+    for (let i = 1; i <= tierCount; i++) {
+      this.tierElements[`tier${i}`] = {
+        taste: document.getElementById(`taste${i}`),
+        size: document.getElementById(`size${i}`),
+        creamTopping: document.getElementById(`creamTopping${i}`),
+        layers: document.getElementById(`layers${i}`),
+        layerFilling: document.getElementById(`layerFilling${i}`)
+      };
+    }
+  }
+
+  // Save current tier form values before regeneration
+  saveTierData(maxTierCount) {
+    const savedData = {};
+    
+    for (let i = 1; i <= maxTierCount; i++) {
+      const tierElements = this.tierElements?.[`tier${i}`];
+      if (tierElements) {
+        savedData[`tier${i}`] = {
+          taste: tierElements.taste?.value || 'vanilla',
+          size: tierElements.size?.value || '18',
+          creamTopping: tierElements.creamTopping?.checked || false,
+          layers: tierElements.layers?.value || '1',
+          layerFillingValues: this.getMultiSelectValues(tierElements.layerFilling)
+        };
+      }
+    }
+    
+    return savedData;
+  }
+
+  // Restore tier form values after regeneration
+  restoreTierData(savedData) {
+    for (const tierKey in savedData) {
+      const tierElements = this.tierElements?.[tierKey];
+      const savedTierData = savedData[tierKey];
+      
+      if (tierElements && savedTierData) {
+        // Restore basic form values
+        if (tierElements.taste) tierElements.taste.value = savedTierData.taste;
+        if (tierElements.size) tierElements.size.value = savedTierData.size;
+        if (tierElements.creamTopping) tierElements.creamTopping.checked = savedTierData.creamTopping;
+        if (tierElements.layers) tierElements.layers.value = savedTierData.layers;
+        
+        // Restore multi-select layer filling values
+        if (tierElements.layerFilling && savedTierData.layerFillingValues) {
+          // Clear all selections first
+          Array.from(tierElements.layerFilling.options).forEach(option => {
+            option.selected = false;
+          });
+          
+          // Restore selected values
+          savedTierData.layerFillingValues.forEach(value => {
+            const option = tierElements.layerFilling.querySelector(`option[value="${value}"]`);
+            if (option) option.selected = true;
+          });
+        }
+      }
+    }
   }
 
   cacheElements() {
@@ -265,27 +446,28 @@ class FormHandler {
 
   getFormData() {
     const elements = this.elements;
+    const tierCount = parseInt(elements.TIERS?.value) || 1;
     
-    return {
+    const data = {
       // Basic options
-      tiers: parseInt(elements.TIERS?.value) || 1,
+      tiers: tierCount,
       tiersText: this.getSelectedOptionText(elements.TIERS),
       type: elements.TYPE?.value || 'cake',
       typeText: this.getSelectedOptionText(elements.TYPE),
       amount: parseInt(elements.AMOUNT?.value) || 1,
       cakeStyle: elements.CAKE_STYLE?.value || 'classic',
       cakeStyleText: this.getSelectedOptionText(elements.CAKE_STYLE),
-      taste: elements.TASTE?.value || 'vanilla',
-      tasteText: this.getSelectedOptionText(elements.TASTE),
-      size: elements.SIZE?.value || '18',
-      sizeText: this.getSelectedOptionText(elements.SIZE),
       
-      // Cake decorations & layers
-      creamTopping: elements.CREAM_TOPPING?.checked || false,
-      layers: parseInt(elements.LAYERS?.value) || 1,
+      // Tier-specific data
+      tierData: [],
+      
+      // Extras & Customizations (moved from old cake decorations)
       naturalColors: elements.NATURAL_COLORS?.checked || false,
       sprinkles: elements.SPRINKLES?.checked || false,
       piping: elements.PIPING?.checked || false,
+      nuts: elements.NUTS?.checked || false,
+      fruits: elements.FRUITS?.checked || false,
+      coconutVanillaCream: elements.COCONUT_VANILLA_CREAM?.checked || false,
       
       // Letters and names
       letters: elements.LETTERS?.value || 'no',
@@ -294,15 +476,6 @@ class FormHandler {
       letters2: elements.LETTERS2?.value || 'no',
       letters2Text: this.getSelectedOptionText(elements.LETTERS2),
       cakeName2: elements.CAKE_NAME2?.value.trim() || '',
-      
-      // Additional decorations
-      nuts: elements.NUTS?.checked || false,
-      fruits: elements.FRUITS?.checked || false,
-      coconutVanillaCream: elements.COCONUT_VANILLA_CREAM?.checked || false,
-      
-      // Layer fillings
-      layerFillingValues: this.getMultiSelectValues(elements.LAYER_FILLING),
-      layerFillingTexts: this.getMultiSelectTexts(elements.LAYER_FILLING),
       
       // Toppers
       topper1: elements.TOPPER1?.checked || false,
@@ -330,6 +503,26 @@ class FormHandler {
       // Total price (will be updated)
       totalPriceText: elements.TOTAL_PRICE_OUTPUT?.textContent || '€0.00'
     };
+
+    // Collect tier-specific data
+    for (let i = 1; i <= tierCount; i++) {
+      const tierElements = this.tierElements[`tier${i}`];
+      if (tierElements) {
+        data.tierData.push({
+          tierNumber: i,
+          taste: tierElements.taste?.value || 'vanilla',
+          tasteText: this.getSelectedOptionText(tierElements.taste),
+          size: tierElements.size?.value || '18',
+          sizeText: this.getSelectedOptionText(tierElements.size),
+          creamTopping: tierElements.creamTopping?.checked || false,
+          layers: parseInt(tierElements.layers?.value) || 1,
+          layerFillingValues: this.getMultiSelectValues(tierElements.layerFilling),
+          layerFillingTexts: this.getMultiSelectTexts(tierElements.layerFilling)
+        });
+      }
+    }
+
+    return data;
   }
 
   getMultiSelectValues(selectElement) {
@@ -414,24 +607,180 @@ class UIController {
   constructor(formHandler) {
     this.formHandler = formHandler;
     this.elements = formHandler.elements;
+    this.tierSectionsContainer = document.getElementById('tierSectionsContainer');
+  }
+
+  /**
+   * Generate dynamic tier setup sections based on selected number of tiers
+   * @param {number} tierCount - Number of tiers to generate
+   */
+  generateTierSections(tierCount) {
+    if (!this.tierSectionsContainer) return;
+
+    // Clear existing tier sections
+    this.tierSectionsContainer.innerHTML = '';
+
+    for (let i = 1; i <= tierCount; i++) {
+      const fieldset = document.createElement('fieldset');
+      fieldset.className = 'tier-setup-section';
+      fieldset.id = `tierSetup${i}`;
+      
+      fieldset.innerHTML = `
+        <legend>Tier Setup ${i}</legend>
+        <label>Taste of Cake
+          <select id="taste${i}">
+            <option value="vanilla">Vanilla</option>
+            <option value="chocolate">Chocolate</option>
+            <option value="carrot">Carrot</option>
+            <option value="orange">Orange</option>
+            <option value="apple">Apple</option>
+          </select>
+        </label>
+        <label>Size
+          <select id="size${i}">
+            <option value="16">16''</option>
+            <option value="18">18''</option>
+            <option value="20">20''</option>
+            <option value="22">22''</option>
+            <option value="24">24''</option>
+            <option value="mini">Mini</option>
+            <option value="regular">Regular</option>
+          </select>
+        </label>
+        <label id="creamToppingLabel${i}">Cream Topping
+          <input type="checkbox" id="creamTopping${i}">
+        </label>
+        <label id="layersLabel${i}">Layers
+          <select id="layers${i}">
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+          </select>
+        </label>
+        <label id="layerFillingLabel${i}">Layer Filling
+          <small class="multi-select-hint">Hold Ctrl/Cmd to select multiple options</small>
+          <select id="layerFilling${i}" size="7" multiple>
+            <option value="nuts">Nuts</option>
+            <option value="fruits">Fruits</option>
+            <option value="oreo">Oreo</option>
+            <option value="lotus">Lotus</option>
+            <option value="lemon">Lemon</option>
+            <option value="orangemango">Orange Mango</option>
+            <option value="raspberry">Raspberry</option>
+            <option value="strawberry">Strawberry</option>
+            <option value="freshstrawberry">Fresh Strawberry</option>
+          </select>
+        </label>
+      `;
+      
+      this.tierSectionsContainer.appendChild(fieldset);
+      
+      // Add event listeners for this tier's layer changes
+      const layersSelect = fieldset.querySelector(`#layers${i}`);
+      if (layersSelect) {
+        layersSelect.addEventListener('change', () => {
+          this.updateTierLayerFillingVisibility(i);
+          this.formHandler.calculateAndUpdatePrice();
+        });
+      }
+    }
   }
 
   updateVisibility() {
     const currentType = this.elements.TYPE?.value || 'cake';
     const prevType = this.elements.TYPE?.dataset.prevType || '';
+    const tierCount = parseInt(this.elements.TIERS?.value) || 1;
+    const prevTierCount = parseInt(this.elements.TIERS?.dataset.prevTierCount) || 1;
+
+    // Only regenerate tier sections if tier count has changed
+    if (tierCount !== prevTierCount) {
+      // Save existing tier data before regeneration
+      const savedTierData = this.formHandler.saveTierData(Math.max(tierCount, prevTierCount));
+      
+      // Generate new tier sections
+      this.generateTierSections(tierCount);
+      this.elements.TIERS.dataset.prevTierCount = tierCount;
+      
+      // Ensure tier elements are cached before updating visibility
+      this.formHandler.cacheTierElements(tierCount);
+      
+      // Restore previously saved tier data
+      this.formHandler.restoreTierData(savedTierData);
+      
+      // Update tier-specific visibility after restoration
+      this.updateTierSpecificVisibility(currentType, tierCount);
+    }
 
     if (this.formHandler.resetFormFieldsOnTypeChange(currentType, prevType)) {
       this.elements.TYPE.dataset.prevType = currentType;
       this.updateTypeSpecificVisibility(currentType);
-      this.updateTasteAndSizeOptions(currentType);
+      this.updateTierSpecificVisibility(currentType, tierCount);
       this.updateConditionalFieldVisibility(currentType);
       return;
     }
 
     this.elements.TYPE.dataset.prevType = currentType;
     this.updateTypeSpecificVisibility(currentType);
-    this.updateTasteAndSizeOptions(currentType);
+    this.updateTierSpecificVisibility(currentType, tierCount);
     this.updateConditionalFieldVisibility(currentType);
+  }
+
+  /**
+   * Update visibility for tier-specific elements
+   * @param {string} currentType - 'cake' or 'cupcake'
+   * @param {number} tierCount - Number of selected tiers
+   */
+  updateTierSpecificVisibility(currentType, tierCount) {
+    const isCakeType = currentType === 'cake';
+    
+    // For each tier, update size options and show/hide cake-specific elements
+    for (let i = 1; i <= tierCount; i++) {
+      const tierElements = this.formHandler.tierElements[`tier${i}`];
+      if (tierElements) {
+        // Update size options for this tier
+        this.updateSizeOptionsForTier(tierElements.size, currentType);
+        
+        // Show/hide cake-specific elements for this tier
+        const creamToppingLabel = document.getElementById(`creamToppingLabel${i}`);
+        const layersLabel = document.getElementById(`layersLabel${i}`);
+        const layerFillingLabel = document.getElementById(`layerFillingLabel${i}`);
+        
+        if (creamToppingLabel) creamToppingLabel.classList.toggle('hidden', currentType !== 'cupcake');
+        if (layersLabel) layersLabel.classList.toggle('hidden', !isCakeType);
+        
+        // Handle layer filling visibility based on layers selection for this tier
+        if (layerFillingLabel && tierElements.layers) {
+          const layersValue = parseInt(tierElements.layers.value) || 1;
+          layerFillingLabel.classList.toggle('hidden', !isCakeType || layersValue <= 1);
+        }
+      }
+    }
+  }
+
+  /**
+   * Update size options for a specific tier
+   * @param {HTMLSelectElement} sizeElement - The size select element
+   * @param {string} currentType - 'cake' or 'cupcake'
+   */
+  updateSizeOptionsForTier(sizeElement, currentType) {
+    if (!sizeElement) return;
+    
+    const validSizes = currentType === 'cake' 
+      ? CONFIG.VALIDATION.VALID_CAKE_SIZES 
+      : CONFIG.VALIDATION.VALID_CUPCAKE_SIZES;
+
+    Array.from(sizeElement.options).forEach(opt => {
+      const isValid = validSizes.includes(opt.value);
+      opt.hidden = !isValid;
+      opt.disabled = !isValid;
+    });
+
+    if (!validSizes.includes(sizeElement.value)) {
+      sizeElement.value = validSizes[0];
+    }
   }
 
   updateTypeSpecificVisibility(currentType) {
@@ -638,6 +987,33 @@ class UIController {
       }
     }
   }
+
+  updateTierLayerFillingVisibility(tierNumber) {
+    const tierElements = this.formHandler.tierElements?.[`tier${tierNumber}`];
+    if (!tierElements) return;
+
+    const layerFillingLabel = document.getElementById(`layerFillingLabel${tierNumber}`);
+    if (!layerFillingLabel) return;
+
+    const currentType = this.elements.TYPE?.value || 'cake';
+    const isCakeType = currentType === 'cake';
+    const layersValue = parseInt(tierElements.layers?.value) || 1;
+
+    // Show layer filling only for cakes with more than 1 layer
+    layerFillingLabel.classList.toggle('hidden', !isCakeType || layersValue <= 1);
+
+    // Clear layer filling values if hidden
+    if (!isCakeType || layersValue <= 1) {
+      const layerFillingSelect = tierElements.layerFilling;
+      if (layerFillingSelect) {
+        // Clear all selected options
+        Array.from(layerFillingSelect.options).forEach(option => {
+          option.selected = false;
+        });
+      }
+    }
+
+  }
 }
 
 // ===== SUMMARY GENERATOR CLASS =====
@@ -666,9 +1042,14 @@ class SummaryGenerator {
       summary += `🎨 *Theme/Design:* ${data.theme}\n`;
     }
 
-    // Add type-specific details
+    // Add tier-specific details
+    if (data.tierData && data.tierData.length > 0) {
+      summary += this.generateTierSpecificSummary(data);
+    }
+
+    // Add global decorations and extras
     if (data.type === 'cake') {
-      summary += this.generateCakeSpecificSummary(data);
+      summary += this.generateGlobalCakeExtras(data);
     } else if (data.type === 'cupcake') {
       summary += this.generateCupcakeSpecificSummary(data);
     }
@@ -685,6 +1066,84 @@ class SummaryGenerator {
     summary += `Looking forward to baking something special for you! 🎂🧁\n\n`;
     summary += `Maayan (Manu) 🩷`;
     
+    return summary;
+  }
+
+  /**
+   * Generate tier-specific summary details
+   * @param {Object} data - Form data
+   * @returns {string} - Tier details
+   */
+  static generateTierSpecificSummary(data) {
+    let summary = '';
+
+    data.tierData.forEach((tier, index) => {
+      summary += `\n🏗️ *Tier ${tier.tierNumber} Details:*\n`;
+      summary += `🍰 *Flavor:* ${tier.tasteText}\n`;
+      summary += `📏 *Size:* ${tier.sizeText}\n`;
+      
+      if (data.type === 'cake') {
+        if (tier.layers > 1) {
+          summary += `겹 *Layers:* ${tier.layers}\n`;
+        }
+        if (tier.layerFillingTexts.length > 0 && tier.layers > 1) {
+          summary += `🍰겹 *Layer Fillings:* ${tier.layerFillingTexts.join(', ')}\n`;
+        }
+      } else if (data.type === 'cupcake') {
+        if (tier.creamTopping) {
+          summary += `🍦 *Cream Topping:* Yes\n`;
+        }
+      }
+    });
+
+    return summary;
+  }
+
+  /**
+   * Generate global cake extras (decorations that apply to entire cake)
+   * @param {Object} data - Form data
+   * @returns {string} - Global extras details
+   */
+  static generateGlobalCakeExtras(data) {
+    let summary = '\n🎨 *Decorations & Extras:*\n';
+
+    if (data.naturalColors) {
+      summary += `🌿 *Natural Colors:* Yes\n`;
+    }
+    if (data.sprinkles) {
+      summary += `✨ *Sprinkles:* Yes\n`;
+    }
+    if (data.piping) {
+      summary += `🍥 *Cream Decoration:* Yes\n`;
+    }
+    if (data.letters !== 'no') {
+      summary += `🔤 *Letters on Cake 1:* ${data.lettersText}\n`;
+      if (data.cakeName) {
+        summary += `🏷️ *Name on Cake 1:* "${data.cakeName}"\n`;
+      }
+    }
+    if (data.letters2 !== 'no') {
+      summary += `🔤 *Letters on Cake 2:* ${data.letters2Text}\n`;
+      if (data.cakeName2) {
+        summary += `🏷️ *Name on Cake 2:* "${data.cakeName2}"\n`;
+      }
+    }
+    if (data.nuts) {
+      summary += `🥜 *Nuts (decoration):* Yes\n`;
+    }
+    if (data.fruits) {
+      summary += `🍓 *Fruits (decoration):* Yes\n`;
+    }
+    if (data.coconutVanillaCream) {
+      summary += `🥥 *Coconut Vanilla Cream:* Yes\n`;
+    }
+    if (data.topper1) {
+      summary += `🎉 *Topper 1:* Yes${data.topper1Text ? ` (${data.topper1Text})` : ''}\n`;
+    }
+    if (data.topper2) {
+      summary += `🎊 *Topper 2:* Yes${data.topper2Text ? ` (${data.topper2Text})` : ''}\n`;
+    }
+
     return summary;
   }
 
@@ -905,6 +1364,11 @@ class CakePriceCalculatorApp {
 
   init() {
     if (this.isInitialized) return;
+    
+    // Initialize with default single tier
+    this.uiController.generateTierSections(1);
+    this.formHandler.elements.TIERS.dataset.prevTierCount = 1;
+    this.formHandler.cacheTierElements(1);
     
     this.setupEventListeners();
     this.updateVisibilityAndPrice();

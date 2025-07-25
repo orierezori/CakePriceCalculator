@@ -1,7 +1,10 @@
 {
   "permissions": {
     "allow": [
-      "Bash(mkdir:*)"
+      "Bash(mkdir:*)",
+      "Bash(start index.html)",
+      "Bash(start:*)",
+      "Bash(node:*)"
     ],
     "deny": []
   }
