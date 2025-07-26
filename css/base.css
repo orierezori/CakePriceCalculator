@@ -1,76 +1,242 @@
 /* ===== CSS VARIABLES & BASE STYLES ===== */
 
 :root {
-  /* Colors */
-  --primary-text-color: #7c3a46;
-  --primary-background-color: #fdf7f0;
-  --form-background-color: #fdeaf0;
-  --form-input-background: #ffffff;
-  --form-border-color: #E0D8F0;
-  --form-focus-border-color: #A45069;
-  --form-focus-shadow-color: rgba(164, 80, 105, 0.2);
-  --checkbox-accent-color: #FFBFA0;
-  --checkbox-checkmark-color: #7c3a46;
-  --select-multiple-option-bg: #FFD8B1;
-  --select-multiple-option-text: #8B4050;
-  --total-price-bg: #E9E3F9;
-  --summary-section-bg: #fdeaf0;
-  --summary-output-bg: #f4effc;
-  --button-primary-bg: #8B4050;
-  --button-primary-text: white;
-  --button-primary-hover-bg: #A45069;
-  --button-disabled-bg: #c8a7b0;
-  --button-disabled-text: #fdf7f0;
-  --tikkie-link-color: #0056b3;
-  --tikkie-link-hover-color: #004080;
-  --shadow-color-soft: rgba(124, 58, 70, 0.1);
-  --shadow-color-text: rgba(213, 196, 140, 0.2);
+  /* Apple-inspired Colors */
+  --primary-text-color: #222222;
+  --primary-background-color: #f8f8fa;
+  --form-background-color: #ffffff;
+  --form-input-background: #f4f4f7;
+  --form-border-color: #e0e0e5;
+  --form-focus-border-color: #007aff;
+  --form-focus-shadow-color: rgba(0, 122, 255, 0.12);
+  --checkbox-accent-color: #34c759;
+  --checkbox-checkmark-color: #ffffff;
+  --select-multiple-option-bg: #eaf6ff;
+  --select-multiple-option-text: #007aff;
+  --total-price-bg: #eaf6ff;
+  --summary-section-bg: #f4f4f7;
+  --summary-output-bg: #f8f8fa;
+  --button-primary-bg: #007aff;
+  --button-primary-text: #ffffff;
+  --button-primary-hover-bg: #005ecb;
+  --button-disabled-bg: #e0e0e5;
+  --button-disabled-text: #b0b0b8;
+  --tikkie-link-color: #007aff;
+  --tikkie-link-hover-color: #005ecb;
+  --shadow-color-soft: rgba(0, 0, 0, 0.04);
+  --shadow-color-text: rgba(0, 0, 0, 0.10);
 
   /* Typography */
-  --font-family-base: 'Arial', sans-serif;
-  --base-font-size: 16px;
-  --line-height-base: 1.6;
+  --font-family-base: 'SF Pro Text', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
+  --base-font-size: 17px;
+  --line-height-base: 1.7;
+  --font-weight-bold: 600;
+  --font-weight-normal: 400;
 
   /* Spacing */
   --spacing-unit: 1rem;
-  --border-radius-small: 6px;
-  --border-radius-medium: 8px;
-  --border-radius-large: 10px;
+  --spacing-xs: 0.5rem;
+  --spacing-sm: 0.75rem;
+  --spacing-md: 1.25rem;
+  --spacing-lg: 2rem;
+  --border-radius-small: 10px;
+  --border-radius-medium: 16px;
+  --border-radius-large: 24px;
+  --transition-fast: 0.18s cubic-bezier(.4,0,.2,1);
+  --transition-slow: 0.35s cubic-bezier(.4,0,.2,1);
 }
 
 /* ===== RESET & BASE STYLES ===== */
 
-* { 
-  box-sizing: border-box; 
-  margin: 0;
-  padding: 0;
+*, *::before, *::after {
+  box-sizing: border-box;
 }
 
 html {
   font-size: var(--base-font-size);
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {
   font-family: var(--font-family-base);
-  padding: var(--spacing-unit);
   background-color: var(--primary-background-color);
-  max-width: 600px;
-  margin: var(--spacing-unit) auto;
   color: var(--primary-text-color);
   line-height: var(--line-height-base);
-  /* Better mobile scrolling */
+  margin: 0 auto;
+  padding: var(--spacing-md) var(--spacing-sm) var(--spacing-lg) var(--spacing-sm);
+  max-width: 480px;
+  min-height: 100vh;
   -webkit-overflow-scrolling: touch;
   overflow-x: hidden;
+  transition: background-color var(--transition-slow);
 }
 
 h1 {
   text-align: center;
-  color: var(--primary-text-color); 
-  font-size: 1.75rem;
-  margin: calc(var(--spacing-unit) * 1.5) 0 calc(var(--spacing-unit) * 2) 0;
-  text-shadow: 1px 1px 2px var(--shadow-color-text);
+  color: var(--primary-text-color);
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  margin: var(--spacing-lg) 0 var(--spacing-md) 0;
+  letter-spacing: -0.01em;
+  text-shadow: none;
 }
 
-.hidden { 
-  display: none !important; 
+.hidden {
+  display: none !important;
+}
+
+form {
+  background: var(--form-background-color);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 16px var(--shadow-color-soft);
+  padding: var(--spacing-md) var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--form-border-color);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+fieldset {
+  border: none;
+  margin: 0 0 var(--spacing-md) 0;
+  padding: 0;
+}
+
+legend {
+  font-size: 1.1rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-xs);
+  color: var(--primary-text-color);
+  letter-spacing: 0.01em;
+}
+
+label {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: 1rem;
+  margin-bottom: var(--spacing-sm);
+  font-weight: var(--font-weight-normal);
+}
+
+input[type="text"],
+input[type="number"],
+input[type="date"],
+select {
+  font-family: inherit;
+  font-size: 1rem;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--border-radius-small);
+  border: 1.5px solid var(--form-border-color);
+  background: var(--form-input-background);
+  color: var(--primary-text-color);
+  margin-top: 0.2rem;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: var(--form-focus-border-color);
+  box-shadow: 0 0 0 2px var(--form-focus-shadow-color);
+}
+
+input[type="checkbox"] {
+  accent-color: var(--checkbox-accent-color);
+  width: 1.2em;
+  height: 1.2em;
+  border-radius: 0.3em;
+  margin-right: 0.5em;
+  vertical-align: middle;
+  transition: accent-color var(--transition-fast);
+}
+
+.total-price-container {
+  background: var(--total-price-bg);
+  border-radius: var(--border-radius-medium);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 1.2rem;
+  font-weight: var(--font-weight-bold);
+  box-shadow: 0 1px 6px var(--shadow-color-soft);
+  border: 1px solid var(--form-border-color);
+}
+
+output {
+  color: var(--button-primary-bg);
+  font-weight: var(--font-weight-bold);
+  font-size: 1.2em;
+}
+
+button, .summary-action-btn {
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: var(--font-weight-bold);
+  background: var(--button-primary-bg);
+  color: var(--button-primary-text);
+  border: none;
+  border-radius: var(--border-radius-small);
+  padding: var(--spacing-xs) var(--spacing-md);
+  margin: var(--spacing-xs) 0;
+  box-shadow: 0 1px 4px var(--shadow-color-soft);
+  cursor: pointer;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+button:active, .summary-action-btn:active {
+  transform: scale(0.97);
+}
+
+button:disabled, .summary-action-btn:disabled {
+  background: var(--button-disabled-bg);
+  color: var(--button-disabled-text);
+  cursor: not-allowed;
+}
+
+button:hover:not(:disabled), .summary-action-btn:hover:not(:disabled) {
+  background: var(--button-primary-hover-bg);
+}
+
+.summary-order-section {
+  background: var(--summary-section-bg);
+  border-radius: var(--border-radius-medium);
+  box-shadow: 0 2px 12px var(--shadow-color-soft);
+  padding: var(--spacing-md) var(--spacing-sm);
+  margin-bottom: var(--spacing-lg);
+  border: 1px solid var(--form-border-color);
+  transition: box-shadow var(--transition-fast), border-color var(--transition-fast);
+}
+
+.summary-order-section h2 {
+  font-size: 1.3rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: var(--spacing-sm);
+  color: var(--primary-text-color);
+}
+
+#orderSummaryOutputContainer {
+  background: var(--summary-output-bg);
+  border-radius: var(--border-radius-small);
+  padding: var(--spacing-sm);
+  margin-top: var(--spacing-sm);
+  box-shadow: 0 1px 4px var(--shadow-color-soft);
+  border: 1px solid var(--form-border-color);
+}
+
+@media (max-width: 600px) {
+  body {
+    padding: var(--spacing-sm) 0 var(--spacing-lg) 0;
+    max-width: 100vw;
+  }
+  form, .summary-order-section {
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-sm);
+    margin-bottom: var(--spacing-md);
+  }
+  .total-price-container {
+    border-radius: var(--border-radius-small);
+    padding: var(--spacing-xs) var(--spacing-sm);
+  }
 }

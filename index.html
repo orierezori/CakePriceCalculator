@@ -13,146 +13,91 @@
   <link rel="stylesheet" href="css/themes.css">
 </head>
 <body>
-  <h1>Cake Price Calculator</h1>
-  <form id="cakeForm">
-    <fieldset>
-      <legend>Basic Options</legend>
-      <label>Type
-        <select id="type">
+  <main>
+    <h1>Cake Price Calculator</h1>
+    <form id="cakeForm" autocomplete="off" aria-label="Cake Price Calculator">
+      <fieldset>
+        <legend>Basic Options</legend>
+        <label for="type">Type</label>
+        <select id="type" name="type">
           <option value="cake">Cake</option>
           <option value="cupcake">Cupcake</option>
         </select>
-      </label>
-      <label>Amount
-        <input type="number" id="amount" min="1" max="500" value="1">
-      </label>
-      <label id="cakeStyleLabel">Cake Style
-        <select id="cakeStyle">
+        <label for="amount">Amount</label>
+        <input type="number" id="amount" name="amount" min="1" max="500" value="1">
+        <label for="cakeStyle" id="cakeStyleLabel">Cake Style</label>
+        <select id="cakeStyle" name="cakeStyle">
           <option value="classic">Classic</option>
           <option value="custom">Custom Made</option>
         </select>
-      </label>
-      <label>Tiers
-        <select id="tiers">
+        <label for="tiers">Tiers</label>
+        <select id="tiers" name="tiers">
           <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
         </select>
-      </label>
     </fieldset>
 
     <!-- Dynamic Tier Setup Sections will be inserted here -->
-    <div id="tierSectionsContainer"></div>
+      <div id="tierSectionsContainer"></div>
 
 
-    <fieldset id="extrasFieldset">
-      <legend>Extras & Customizations</legend>
-      <label>Natural Colors
-        <input type="checkbox" id="naturalColors">
-      </label>
-      <label id="sprinklesLabel">Sprinkles
-        <input type="checkbox" id="sprinkles">
-      </label>
-      <label id="pipingLabel">Cream Decoration
-        <input type="checkbox" id="piping">
-      </label>
-      <label id="nutsLabel">Nuts (decoration)
-        <input type="checkbox" id="nuts">
-      </label>
-      <label id="fruitsLabel">Fruits (decoration)
-        <input type="checkbox" id="fruits">
-      </label>
-      <label id="coconutVanillaCreamLabel">Coconut Vanilla Cream
-        <input type="checkbox" id="coconutVanillaCream">
-      </label>
-      <label id="drippingLabel">Dripping
-        <input type="checkbox" id="dripping">
-      </label>
-      <label id="flowersDecorationLabel">Flowers Decoration
-        <input type="checkbox" id="flowersDecoration">
-      </label>
-      <label id="cakeCoatingCreamLabel">Cake-coating Cream
-        <input type="checkbox" id="cakeCoatingCream">
-      </label>
-      <label id="toppers1Label">Toppers 1
-        <input type="checkbox" id="topper1">
-        <input type="text" id="topper1Text" placeholder="Optional details" class="topper-text-input hidden">
-      </label>
-      <label id="toppers2Label">Toppers 2
-        <input type="checkbox" id="topper2">
-        <input type="text" id="topper2Text" placeholder="Optional details" class="topper-text-input hidden">
-      </label>
-      <label id="customAdditionLabel">Custom Addition 1
-        <input type="checkbox" id="customAddition">
-        <input type="text" id="customAdditionText" placeholder="Description" class="topper-text-input hidden">
-        <input type="number" id="customAdditionPrice" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01">
-      </label>
-      <label id="customAddition2Label">Custom Addition 2
-        <input type="checkbox" id="customAddition2">
-        <input type="text" id="customAddition2Text" placeholder="Description" class="topper-text-input hidden">
-        <input type="number" id="customAddition2Price" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01">
-      </label>
-      <label id="discountLabel">Discount
-        <input type="checkbox" id="discount">
-        <input type="number" id="discountAmount" placeholder="Amount" class="topper-text-input hidden" min="0" step="0.01">
-      </label>
-      <label id="lettersLabel">Letters on Cake 1
-        <select id="letters">
-          <option value="no">No</option>
-          <option value="small">Small</option>
-          <option value="big">Big</option>
-        </select>
-      </label>
-      <label id="nameLabel">Name on Cake 1
-        <input type="text" id="cakeName">
-      </label>
-      <label id="letters2Label">Letters on Cake 2
-        <select id="letters2">
-          <option value="no">No</option>
-          <option value="small">Small</option>
-          <option value="big">Big</option>
-        </select>
-      </label>
-      <label id="name2Label">Name on Cake 2
-        <input type="text" id="cakeName2">
-      </label>
-    </fieldset>
+      <fieldset id="extrasFieldset">
+        <legend>Extras & Customizations</legend>
+        <div class="extras-grid">
+          <label for="naturalColors"><input type="checkbox" id="naturalColors">Natural Colors</label>
+          <label for="sprinkles" id="sprinklesLabel"><input type="checkbox" id="sprinkles">Sprinkles</label>
+          <label for="piping" id="pipingLabel"><input type="checkbox" id="piping">Cream Decoration</label>
+          <label for="nuts" id="nutsLabel"><input type="checkbox" id="nuts">Nuts (decoration)</label>
+          <label for="fruits" id="fruitsLabel"><input type="checkbox" id="fruits">Fruits (decoration)</label>
+          <label for="coconutVanillaCream" id="coconutVanillaCreamLabel"><input type="checkbox" id="coconutVanillaCream">Coconut Vanilla Cream</label>
+          <label for="dripping" id="drippingLabel"><input type="checkbox" id="dripping">Dripping</label>
+          <label for="flowersDecoration" id="flowersDecorationLabel"><input type="checkbox" id="flowersDecoration">Flowers Decoration</label>
+          <label for="cakeCoatingCream" id="cakeCoatingCreamLabel"><input type="checkbox" id="cakeCoatingCream">Cake-coating Cream</label>
+          <label for="topper1" id="toppers1Label"><input type="checkbox" id="topper1">Toppers 1 <input type="text" id="topper1Text" placeholder="Optional details" class="topper-text-input hidden"></label>
+          <label for="topper2" id="toppers2Label"><input type="checkbox" id="topper2">Toppers 2 <input type="text" id="topper2Text" placeholder="Optional details" class="topper-text-input hidden"></label>
+          <label for="customAddition" id="customAdditionLabel"><input type="checkbox" id="customAddition">Custom Addition 1 <input type="text" id="customAdditionText" placeholder="Description" class="topper-text-input hidden"> <input type="number" id="customAdditionPrice" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01"></label>
+          <label for="customAddition2" id="customAddition2Label"><input type="checkbox" id="customAddition2">Custom Addition 2 <input type="text" id="customAddition2Text" placeholder="Description" class="topper-text-input hidden"> <input type="number" id="customAddition2Price" placeholder="Price" class="topper-text-input hidden" min="0" step="0.01"></label>
+          <label for="discount" id="discountLabel"><input type="checkbox" id="discount">Discount <input type="number" id="discountAmount" placeholder="Amount" class="topper-text-input hidden" min="0" step="0.01"></label>
+          <label for="letters" id="lettersLabel">Letters on Cake 1 <select id="letters"><option value="no">No</option><option value="small">Small</option><option value="big">Big</option></select></label>
+          <label for="cakeName" id="nameLabel">Name on Cake 1 <input type="text" id="cakeName"></label>
+          <label for="letters2" id="letters2Label">Letters on Cake 2 <select id="letters2"><option value="no">No</option><option value="small">Small</option><option value="big">Big</option></select></label>
+          <label for="cakeName2" id="name2Label">Name on Cake 2 <input type="text" id="cakeName2"></label>
+        </div>
+      </fieldset>
     
-    <div class="total-price-container">
-      <label for="totalPriceOutput">Total Price:</label>
-      <output name="totalPrice" id="totalPriceOutput" for="cakeForm">€0.00</output>
-    </div>
-  </form>
-
-  <div class="summary-order-section">
-    <h2>Order Details</h2>
-    <fieldset>
-      <legend>Customer & Pickup Information</legend>
-      <label>Theme
-        <input type="text" id="theme" name="theme" placeholder="e.g., Unicorn, Floral, Spiderman">
-      </label>
-      <label>Pickup Date
-        <input type="date" id="pickupDate" name="pickupDate">
-      </label>
-      <label>Allergies / Special Requests
-        <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
-      </label>
-    </fieldset>
-    <div id="summarizeButtonsContainer">
-        <button type="button" id="summariseOrderBtn" class="summary-action-btn"><span class="icon">📄</span> Summarise Order</button>
-        <button type="button" id="summariseOrderAIBtn" class="summary-action-btn"><span class="icon">🤖</span> Summarise Order AI</button>
-    </div>
-    <div id="orderSummaryOutputContainer" style="display: none;">
-      <pre id="orderSummaryOutput"></pre>
-      <div id="summaryActionsContainer">
-        <button id="copySummaryBtn" title="Copy Summary"><span class="icon">📋</span> Copy</button>
-        <button id="generateTikkieBtn" title="Generate Tikkie"><span class="icon">💸</span> Generate Tikkie</button>
-        <button id="addToCalendarBtn" title="Add to Calendar"><span class="icon">📅</span> Add to Calendar</button>
-        <button id="addTaskBtn" title="Add Task"><span class="icon">✅</span> Add Task</button>
+      <div class="total-price-container">
+        <label for="totalPriceOutput">Total Price:</label>
+        <output name="totalPrice" id="totalPriceOutput" for="cakeForm">€0.00</output>
       </div>
-    </div>
-    <div></div>
-  </div>
+    </form>
+
+    <section class="summary-order-section" aria-label="Order Details">
+      <h2>Order Details</h2>
+      <fieldset>
+        <legend>Customer & Pickup Information</legend>
+        <label for="theme">Theme</label>
+        <input type="text" id="theme" name="theme" placeholder="e.g., Unicorn, Floral, Spiderman">
+        <label for="pickupDate">Pickup Date</label>
+        <input type="date" id="pickupDate" name="pickupDate">
+        <label for="alergies">Allergies / Special Requests</label>
+        <input type="text" id="alergies" name="alergies" placeholder="e.g., Gluten-free, nut allergy, less sugar">
+      </fieldset>
+      <div id="summarizeButtonsContainer">
+          <button type="button" id="summariseOrderBtn" class="summary-action-btn"><span class="icon">📄</span> Summarise Order</button>
+          <button type="button" id="summariseOrderAIBtn" class="summary-action-btn"><span class="icon">🤖</span> Summarise Order AI</button>
+      </div>
+      <div id="orderSummaryOutputContainer" style="display: none;">
+        <pre id="orderSummaryOutput"></pre>
+        <div id="summaryActionsContainer">
+          <button id="copySummaryBtn" title="Copy Summary"><span class="icon">📋</span> Copy</button>
+          <button id="generateTikkieBtn" title="Generate Tikkie"><span class="icon">💸</span> Generate Tikkie</button>
+          <button id="addToCalendarBtn" title="Add to Calendar"><span class="icon">📅</span> Add to Calendar</button>
+          <button id="addTaskBtn" title="Add Task"><span class="icon">✅</span> Add Task</button>
+        </div>
+      </div>
+    </section>
+  </main>
 
   <!-- JavaScript Files -->
   <script src="script-new.js" defer></script>
