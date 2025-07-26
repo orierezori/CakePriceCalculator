@@ -1280,10 +1280,25 @@ Type: ${data.type}
 Amount: ${data.amount}
 `;
 
+    // Handle tiered data for cakes and cupcakes
+    if (Array.isArray(data.tierData) && data.tierData.length > 0) {
+      data.tierData.forEach((tier, idx) => {
+        promptString += `\nTier ${tier.tierNumber} Details:\n`;
+        promptString += `Flavor: ${tier.tasteText}\n`;
+        promptString += `Size: ${tier.sizeText}\n`;
+        if (data.type === 'cake') {
+          promptString += `Layers: ${tier.layers}\n`;
+          if (Array.isArray(tier.layerFillingTexts) && tier.layerFillingTexts.length > 0 && tier.layers > 1) {
+            promptString += `Layer Fillings: ${tier.layerFillingTexts.join(', ')}\n`;
+          }
+        } else if (data.type === 'cupcake') {
+          if (tier.creamTopping) promptString += `Cream Topping: Yes\n`;
+        }
+      });
+    }
+
     if (data.type === 'cake') {
       promptString += `Cake Style: ${data.cakeStyle}\n`;
-      promptString += `Layers: ${data.layers}\n`;
-      
       if (data.naturalColors) promptString += `Natural Colors: Yes\n`;
       if (data.sprinkles) promptString += `Sprinkles: Yes\n`;
       if (data.piping) promptString += `Cream Decoration: Yes\n`;
@@ -1301,9 +1316,6 @@ Amount: ${data.amount}
       if (data.dripping) promptString += `Dripping: Yes\n`;
       if (data.flowersDecoration) promptString += `Flowers Decoration: Yes\n`;
       if (data.cakeCoatingCream) promptString += `Cake-coating Cream: Yes\n`;
-      if (data.layerFillingValues.length > 0 && data.layers > 1) {
-        promptString += `Layer Fillings: ${data.layerFillingValues.join(', ')}\n`;
-      }
       if (data.topper1) {
         promptString += `Topper 1: Yes${data.topper1Text ? ` (${data.topper1Text})` : ''}\n`;
       }
@@ -1311,12 +1323,12 @@ Amount: ${data.amount}
         promptString += `Topper 2: Yes${data.topper2Text ? ` (${data.topper2Text})` : ''}\n`;
       }
     } else if (data.type === 'cupcake') {
-      if (data.creamTopping) promptString += `Cream Topping: Yes\n`;
       if (data.naturalColors) promptString += `Natural Colors: Yes\n`;
     }
-    
-    promptString += `Taste: ${data.taste}\n`;
-    promptString += `Size: ${data.size}\n`;
+
+    // Add global taste/size for legacy support (single-tier forms)
+    if (data.taste) promptString += `Taste: ${data.taste}\n`;
+    if (data.size) promptString += `Size: ${data.size}\n`;
 
     if (data.theme) promptString += `Theme/Design: ${data.theme}\n`;
     if (data.pickupDate) {
@@ -1325,7 +1337,7 @@ Amount: ${data.amount}
       promptString += `Pickup Date: ${formattedDate}\n`;
     }
     if (data.alergies) promptString += `Allergies/Special Requests: ${data.alergies}\n`;
-    
+
     promptString += `Total Price: €${data.totalPriceText}\n`;
 
     // Add custom additions
