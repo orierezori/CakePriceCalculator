@@ -266,12 +266,12 @@ class PriceCalculator {
 
   static calculateLettersPrice(lettersType, name) {
     if (lettersType === 'no' || !name) return 0;
-    
+    // Remove spaces from name for price calculation
+    const nameNoSpaces = name.replace(/\s+/g, '');
     const pricePerChar = lettersType === 'small' 
       ? CONFIG.PRICING.CAKE.LETTERS_SMALL_PER_CHAR 
       : CONFIG.PRICING.CAKE.LETTERS_BIG_PER_CHAR;
-    
-    return pricePerChar * name.length;
+    return pricePerChar * nameNoSpaces.length;
   }
 
   static calculateLayerFillingsPrice(data) {
