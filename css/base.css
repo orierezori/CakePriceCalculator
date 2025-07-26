@@ -1,30 +1,37 @@
 /* ===== CSS VARIABLES & BASE STYLES ===== */
 
 :root {
-  /* Apple-inspired Colors */
-  --primary-text-color: #222222;
-  --primary-background-color: #f8f8fa;
-  --form-background-color: #ffffff;
-  --form-input-background: #f4f4f7;
-  --form-border-color: #e0e0e5;
-  --form-focus-border-color: #007aff;
-  --form-focus-shadow-color: rgba(0, 122, 255, 0.12);
-  --checkbox-accent-color: #34c759;
+  /* Apple HIG Grays & Colorful Touches */
+  --primary-text-color: #1c1c1e; /* Gray 900 */
+  --secondary-text-color: #3a3a3c; /* Gray 700 */
+  --tertiary-text-color: #636366; /* Gray 500 */
+  --primary-background-color: #f2f2f7; /* System Gray 6 (Apple default background) */
+  --secondary-background-color: #e5e5ea; /* System Gray 5 (Apple secondary background) */
+  --form-background-color: #ffffff; /* System Background (white) */
+  --form-input-background: #f9f9fb; /* System Gray 6, lighter */
+  --form-border-color: #e5e5ea; /* System Gray 5 */
+  --form-focus-border-color: #007aff; /* System Blue */
+  --form-focus-shadow-color: rgba(0, 122, 255, 0.15); /* System Blue shadow */
+  --checkbox-accent-color: #30d158; /* System Green */
   --checkbox-checkmark-color: #ffffff;
-  --select-multiple-option-bg: #eaf6ff;
-  --select-multiple-option-text: #007aff;
-  --total-price-bg: #eaf6ff;
-  --summary-section-bg: #f4f4f7;
-  --summary-output-bg: #f8f8fa;
-  --button-primary-bg: #007aff;
+  --select-multiple-option-bg: #e5e5ea; /* System Gray 5 */
+  --select-multiple-option-text: #007aff; /* System Blue */
+  --total-price-bg: #eaf6fb; /* Blue 50 tint, subtle accent */
+  --summary-section-bg: #f2f2f7; /* System Gray 6, for section */
+  --summary-output-bg: #e5e5ea; /* System Gray 5, for output */
+  --button-primary-bg: #007aff; /* System Blue */
   --button-primary-text: #ffffff;
-  --button-primary-hover-bg: #005ecb;
-  --button-disabled-bg: #e0e0e5;
-  --button-disabled-text: #b0b0b8;
-  --tikkie-link-color: #007aff;
-  --tikkie-link-hover-color: #005ecb;
-  --shadow-color-soft: rgba(0, 0, 0, 0.04);
-  --shadow-color-text: rgba(0, 0, 0, 0.10);
+  --button-primary-hover-bg: #5e5ce6; /* System Indigo for accent */
+  --button-secondary-bg: #ff9f0a; /* System Orange for accent */
+  --button-secondary-text: #ffffff;
+  --button-secondary-hover-bg: #c93400; /* System Orange dark */
+  --button-disabled-bg: #e5e5ea; /* System Gray 3 */
+  --button-disabled-text: #aeaeb2; /* System Gray 2 */
+  --tikkie-link-color: #007aff; /* System Blue */
+  --tikkie-link-hover-color: #5e5ce6; /* System Indigo */
+  --highlight-color: #ff375f; /* System Pink for highlight */
+  --shadow-color-soft: rgba(28, 28, 30, 0.06); /* Gray 900, soft */
+  --shadow-color-text: rgba(0, 122, 255, 0.10); /* System Blue, soft */
 
   /* Typography */
   --font-family-base: 'SF Pro Text', 'Segoe UI', 'Roboto', 'Arial', sans-serif;
