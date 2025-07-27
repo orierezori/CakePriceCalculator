@@ -63,7 +63,7 @@ const CONFIG = {
     MAX_AMOUNT: 500,
     VALID_CAKE_SIZES: ['16', '18', '20', '22', '24'],
     VALID_CUPCAKE_SIZES: ['mini', 'regular'],
-    EXPENSIVE_FILLINGS: ['lemon', 'orangemango', 'raspberry', 'strawberry'],
+    EXPENSIVE_FILLINGS: ['lemon', 'orange', 'mango', 'raspberry', 'strawberry'],
     PREMIUM_FILLINGS: ['freshstrawberry']
   }
 };
@@ -680,7 +680,8 @@ class UIController {
             <option value="oreo">Oreo (€1.50 per layer)</option>
             <option value="lotus">Lotus (€1.50 per layer)</option>
             <option value="lemon">Lemon (€2.00 per layer)</option>
-            <option value="orangemango">Orange Mango (€2.00 per layer)</option>
+            <option value="orange">Orange (€2.00 per layer)</option>
+            <option value="mango">Mango (€2.00 per layer)</option>
             <option value="raspberry">Raspberry (€2.00 per layer)</option>
             <option value="strawberry">Strawberry (€2.00 per layer)</option>
             <option value="freshstrawberry">Fresh Strawberry (€3.00 per layer)</option>
