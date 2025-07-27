@@ -650,26 +650,26 @@ class UIController {
         </label>
         <label>Size
           <select id="size${i}">
-            <option value="16">16''</option>
-            <option value="18">18''</option>
-            <option value="20">20''</option>
-            <option value="22">22''</option>
-            <option value="24">24''</option>
-            <option value="mini">Mini</option>
-            <option value="regular">Regular</option>
+            <option value="16">16'' (€30.00)</option>
+            <option value="18">18'' (€30.00)</option>
+            <option value="20">20'' (€35.00)</option>
+            <option value="22">22'' (€40.00)</option>
+            <option value="24">24'' (€45.00)</option>
+            <option value="mini">Mini (€2.00)</option>
+            <option value="regular">Regular (€4.00)</option>
           </select>
         </label>
-        <label id="creamToppingLabel${i}">Cream Topping
+        <label id="creamToppingLabel${i}">Cream Topping (€0.50 per unit)
           <input type="checkbox" id="creamTopping${i}">
         </label>
         <label id="layersLabel${i}">Layers
           <select id="layers${i}">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
+            <option value="1">1 (Base)</option>
+            <option value="2">2 (+€10.00)</option>
+            <option value="3">3 (+€20.00)</option>
+            <option value="4">4 (+€30.00)</option>
+            <option value="5">5 (+€40.00)</option>
+            <option value="6">6 (+€50.00)</option>
           </select>
         </label>
         <label id="layerFillingLabel${i}">Layer Filling
