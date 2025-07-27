@@ -675,15 +675,15 @@ class UIController {
         <label id="layerFillingLabel${i}">Layer Filling
           <small class="multi-select-hint">Hold Ctrl/Cmd to select multiple options</small>
           <select id="layerFilling${i}" size="7" multiple>
-            <option value="nuts">Nuts</option>
-            <option value="fruits">Fruits</option>
-            <option value="oreo">Oreo</option>
-            <option value="lotus">Lotus</option>
-            <option value="lemon">Lemon</option>
-            <option value="orangemango">Orange Mango</option>
-            <option value="raspberry">Raspberry</option>
-            <option value="strawberry">Strawberry</option>
-            <option value="freshstrawberry">Fresh Strawberry</option>
+            <option value="nuts">Nuts (€1.50 per layer)</option>
+            <option value="fruits">Fruits (€1.50 per layer)</option>
+            <option value="oreo">Oreo (€1.50 per layer)</option>
+            <option value="lotus">Lotus (€1.50 per layer)</option>
+            <option value="lemon">Lemon (€2.00 per layer)</option>
+            <option value="orangemango">Orange Mango (€2.00 per layer)</option>
+            <option value="raspberry">Raspberry (€2.00 per layer)</option>
+            <option value="strawberry">Strawberry (€2.00 per layer)</option>
+            <option value="freshstrawberry">Fresh Strawberry (€3.00 per layer)</option>
           </select>
         </label>
       `;
