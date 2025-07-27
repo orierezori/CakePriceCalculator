@@ -782,7 +782,15 @@ class UIController {
       if (layersSelect) {
         layersSelect.addEventListener('change', () => {
           this.updateTierLayerFillingVisibility(i);
-          this.formHandler.calculateAndUpdatePrice();
+          if (this.formHandler && typeof this.formHandler.calculateAndUpdatePrice === 'function') {
+            this.formHandler.calculateAndUpdatePrice();
+          } else {
+            // Fallback to update price through the global form handler
+            const mainForm = document.getElementById('cakeForm');
+            if (mainForm && mainForm.formHandler && typeof mainForm.formHandler.calculateAndUpdatePrice === 'function') {
+              mainForm.formHandler.calculateAndUpdatePrice();
+            }
+          }
         });
       }
     }
@@ -1482,8 +1490,16 @@ Amount: ${data.amount}
 class CakePriceCalculatorApp {
   constructor() {
     this.formHandler = new FormHandler();
-    this.uiController = new UIController(this.formHandler);
     this.isInitialized = false;
+    
+    // Initialize UI Controller after form handler is created
+    this.uiController = new UIController(this.formHandler);
+    
+    // Store formHandler reference on the form element for global access
+    const form = document.getElementById('cakeForm');
+    if (form) {
+      form.formHandler = this.formHandler;
+    }
   }
 
   init() {
