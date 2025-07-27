@@ -111,6 +111,32 @@ class PriceCalculator {
     return Math.max(0, price);
   }
 
+  static updateNamePriceDisplay(lettersId, nameId, priceSpanId) {
+    const lettersSelect = document.getElementById(lettersId);
+    const nameInput = document.getElementById(nameId);
+    const priceSpan = document.getElementById(priceSpanId);
+    
+    if (!lettersSelect || !nameInput || !priceSpan) return;
+
+    const lettersType = lettersSelect.value;
+    const name = nameInput.value;
+    
+    if (lettersType === 'no' || !name) {
+      priceSpan.textContent = '';
+      return;
+    }
+
+    const pricePerChar = lettersType === 'small' 
+      ? CONFIG.PRICING.CAKE.LETTERS_SMALL_PER_CHAR 
+      : CONFIG.PRICING.CAKE.LETTERS_BIG_PER_CHAR;
+    
+    const totalPrice = name.length * pricePerChar;
+    priceSpan.textContent = ` (€${totalPrice.toFixed(2)})`;
+
+    // Ensure price doesn't go below zero
+    return Math.max(0, price);
+  }
+
   /**
    * Calculate price for a single tier of cake
    * @param {Object} tierData - Single tier data
@@ -620,6 +646,66 @@ class UIController {
     this.formHandler = formHandler;
     this.elements = formHandler.elements;
     this.tierSectionsContainer = document.getElementById('tierSectionsContainer');
+    
+    // Add event listeners for name price updates
+    this.setupNamePriceListeners();
+  }
+
+  setupNamePriceListeners() {
+    ['letters', 'letters2'].forEach(letterId => {
+      const lettersSelect = document.getElementById(letterId);
+      if (lettersSelect) {
+        lettersSelect.addEventListener('change', () => {
+          this.updateNamePriceDisplay(
+            letterId,
+            letterId === 'letters' ? 'cakeName' : 'cakeName2',
+            letterId === 'letters' ? 'name1Price' : 'name2Price'
+          );
+        });
+      }
+    });
+
+    ['cakeName', 'cakeName2'].forEach(nameId => {
+      const nameInput = document.getElementById(nameId);
+      if (nameInput) {
+        nameInput.addEventListener('input', () => {
+          this.updateNamePriceDisplay(
+            nameId === 'cakeName' ? 'letters' : 'letters2',
+            nameId,
+            nameId === 'cakeName' ? 'name1Price' : 'name2Price'
+          );
+        });
+      }
+    });
+  }
+
+  updateNamePriceDisplay(lettersId, nameId, priceSpanId) {
+    const lettersSelect = document.getElementById(lettersId);
+    const nameInput = document.getElementById(nameId);
+    const priceSpan = document.getElementById(priceSpanId);
+    
+    if (!lettersSelect || !nameInput || !priceSpan) return;
+
+    const lettersType = lettersSelect.value;
+    const name = nameInput.value;
+    
+    if (lettersType === 'no' || !name) {
+      priceSpan.textContent = '';
+      return;
+    }
+
+    const pricePerChar = lettersType === 'small' 
+      ? CONFIG.PRICING.CAKE.LETTERS_SMALL_PER_CHAR 
+      : CONFIG.PRICING.CAKE.LETTERS_BIG_PER_CHAR;
+    
+    if (name && name.length > 0) {
+      // Remove spaces before calculating the price
+      const textWithoutSpaces = name.replace(/\s/g, '');
+      const totalPrice = textWithoutSpaces.length * pricePerChar;
+      priceSpan.textContent = ` (€${totalPrice.toFixed(2)})`;
+    } else {
+      priceSpan.textContent = '';
+    }
   }
 
   /**
